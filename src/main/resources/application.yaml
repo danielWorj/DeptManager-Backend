@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: DeptManager
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/deptManagerDB?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    username: dan
+    password: dan
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
