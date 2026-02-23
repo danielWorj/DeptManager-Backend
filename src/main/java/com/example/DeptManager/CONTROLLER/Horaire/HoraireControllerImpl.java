@@ -2,6 +2,8 @@ package com.example.DeptManager.CONTROLLER.Horaire;
 
 import com.example.DeptManager.DTO.HoraireDTO;
 import com.example.DeptManager.ENTITY.Horaire.Horaire;
+import com.example.DeptManager.ENTITY.Horaire.Jour;
+import com.example.DeptManager.ENTITY.Horaire.Periode;
 import com.example.DeptManager.ENTITY.Server.ServerReponse;
 import com.example.DeptManager.ENTITY.Structure.Filiere;
 import com.example.DeptManager.REPOSITORY.Horaire.HoraireRepository;
@@ -41,13 +43,28 @@ public class HoraireControllerImpl implements HoraireControllerInt {
     private PeriodeRepository periodeRepository;
 
     @Override
+    public ResponseEntity<List<Jour>> getAllJour() {
+        return ResponseEntity.ok(
+                this.jourRepository.findAll()
+        );
+    }
+
+    @Override
+    public ResponseEntity<List<Periode>> getAllPeriode() {
+        return ResponseEntity.ok(
+                this.periodeRepository.findAll()
+        );
+    }
+
+    @Override
     public ResponseEntity<ServerReponse> creationHoraire(String horaire) {
         HoraireDTO horaireDTO = new ObjectMapper().readValue(horaire, HoraireDTO.class);
 
         Horaire horaireDB = new Horaire();
 
         horaireDB.setFiliere(this.filiereRepository.findById(horaireDTO.getFiliere()).orElse(null));
-        horaireDB.setNiveau(this.niveauRepository.findById(horaireDTO.getId()).orElse(null));
+        horaireDB.setNiveau(this.niveauRepository.findById(horaireDTO.getNiveau()).orElse(null));
+        horaireDB.setEnseignant(this.enseignantRepository.findById(horaireDTO.getEnseignant()).orElse(null));
         horaireDB.setJour(this.jourRepository.findById(horaireDTO.getJour()).orElse(null));
         horaireDB.setMatiere(this.matiereRepository.findById(horaireDTO.getMatiere()).orElse(null));
         horaireDB.setPeriode(this.periodeRepository.findById(horaireDTO.getPeriode()).orElse(null));
@@ -70,6 +87,7 @@ public class HoraireControllerImpl implements HoraireControllerInt {
             horaireDB.setFiliere(this.filiereRepository.findById(horaireDTO.getFiliere()).orElse(null));
             horaireDB.setNiveau(this.niveauRepository.findById(horaireDTO.getId()).orElse(null));
             horaireDB.setJour(this.jourRepository.findById(horaireDTO.getJour()).orElse(null));
+            horaireDB.setEnseignant(this.enseignantRepository.findById(horaireDTO.getEnseignant()).orElse(null));
             horaireDB.setMatiere(this.matiereRepository.findById(horaireDTO.getMatiere()).orElse(null));
             horaireDB.setPeriode(this.periodeRepository.findById(horaireDTO.getPeriode()).orElse(null));
             horaireDB.setSalle(this.salleRepository.findById(horaireDTO.getSalle()).orElse(null));

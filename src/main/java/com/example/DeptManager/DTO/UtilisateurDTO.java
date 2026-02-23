@@ -1,24 +1,18 @@
-package com.example.DeptManager.ENTITY.Utilisateur;
+package com.example.DeptManager.DTO;
 
-import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
 
-
-@Entity
 @Data
-@Inheritance(strategy = InheritanceType.JOINED) //Heritage
-@DiscriminatorColumn(name = "quality_user")
-public class Utilisateur {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UtilisateurDTO {
     private Integer id ;
     private String nom ;
     private String prenom ;
     private LocalDate dateCreation;
-    private String email;
     private String telephone ;
+
+    private String email;
     private String password;
     private Integer role ;
     private Boolean status ;

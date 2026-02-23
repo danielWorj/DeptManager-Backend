@@ -1,26 +1,37 @@
-package com.example.DeptManager.ENTITY.Horaire;
+package com.example.DeptManager.ENTITY.Scolarite.Documentation;
 
+import com.example.DeptManager.ENTITY.Scolarite.AnneeAcademique;
 import com.example.DeptManager.ENTITY.Scolarite.Matiere;
 import com.example.DeptManager.ENTITY.Structure.Departement;
 import com.example.DeptManager.ENTITY.Structure.Filiere;
 import com.example.DeptManager.ENTITY.Structure.Niveau;
-import com.example.DeptManager.ENTITY.Structure.Salle;
 import com.example.DeptManager.ENTITY.Utilisateur.Enseignant;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Entity
-@Table
 @Data
-public class Horaire {
-    @Id
+@Table
+public class Document {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id ;
+    private String url ;
+    private LocalDate dateC;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Enseignant enseignant ;
+    private TypeDocument typeDocument ;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+    private Matiere matiere ;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+    private Departement departement ;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
@@ -32,21 +43,10 @@ public class Horaire {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Matiere matiere ;
+    private Enseignant enseignant ;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Salle salle ;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Jour jour ;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Periode periode ;
-
-
-
+    private AnneeAcademique anneeAcademique ;
 
 }

@@ -5,6 +5,7 @@ import com.example.DeptManager.ENTITY.Structure.Departement;
 import com.example.DeptManager.ENTITY.Structure.Filiere;
 import com.example.DeptManager.ENTITY.Structure.Niveau;
 import com.example.DeptManager.ENTITY.Structure.Salle;
+import com.example.DeptManager.ENTITY.Utilisateur.Poste;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +56,11 @@ public interface StructureControllerInt {
     @GetMapping("/salle/delete/{id}")
     ResponseEntity<ServerReponse> deleteSalle(@PathVariable Integer id);
 
+    //Poste
+    @GetMapping("/poste/all")
+    ResponseEntity<List<Poste>> findAllPoste();
+    @PostMapping("/poste/create")
+    ResponseEntity<ServerReponse> createPoste(@RequestParam("poste") String poste);
 
 
 }

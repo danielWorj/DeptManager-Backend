@@ -14,6 +14,8 @@ public class Matiere {
     private Integer id;
     private String intitule ;
     private Integer semestre ;
+    private Integer credit ;
+    private Integer seance ;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Departement departement ;

@@ -1,17 +1,15 @@
-package com.example.DeptManager.ENTITY.Horaire;
+package com.example.DeptManager.ENTITY.Scolarite.Documentation;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalTime;
-
 @Entity
 @Table
 @Data
-public class Periode {
+public class TypeDocument {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id ;
-    private String debut ;
-    private String fin ;
+    private String intitule ;
+    private String description ;
 }

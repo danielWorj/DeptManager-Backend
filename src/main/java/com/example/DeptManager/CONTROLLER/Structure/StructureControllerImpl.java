@@ -6,10 +6,8 @@ import com.example.DeptManager.ENTITY.Structure.Departement;
 import com.example.DeptManager.ENTITY.Structure.Filiere;
 import com.example.DeptManager.ENTITY.Structure.Niveau;
 import com.example.DeptManager.ENTITY.Structure.Salle;
-import com.example.DeptManager.REPOSITORY.Structure.DepartementRepository;
-import com.example.DeptManager.REPOSITORY.Structure.FiliereRepository;
-import com.example.DeptManager.REPOSITORY.Structure.NiveauRepository;
-import com.example.DeptManager.REPOSITORY.Structure.SalleRepository;
+import com.example.DeptManager.ENTITY.Utilisateur.Poste;
+import com.example.DeptManager.REPOSITORY.Structure.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -30,6 +28,9 @@ public class StructureControllerImpl implements StructureControllerInt{
     private NiveauRepository niveauRepository;
     @Autowired
     private SalleRepository salleRepository;
+    @Autowired
+    private PosteRepository posteRepository;
+
 
     @Override
     public ResponseEntity<List<Departement>> findAllDepartement() {
@@ -176,5 +177,17 @@ public class StructureControllerImpl implements StructureControllerInt{
     public ResponseEntity<ServerReponse> deleteSalle(Integer id) {
         this.salleRepository.deleteById(id);
         return ResponseEntity.ok(new ServerReponse("Salle supprime", true));
+    }
+
+    @Override
+    public ResponseEntity<List<Poste>> findAllPoste() {
+        return ResponseEntity.ok(
+                this.posteRepository.findAll()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> createPoste(String poste) {
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.DeptManager.ENTITY.Utilisateur;
 
+import com.example.DeptManager.ENTITY.Structure.Departement;
 import com.example.DeptManager.ENTITY.Structure.Niveau;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.DiscriminatorValue;
@@ -15,5 +16,10 @@ public class Enseignant extends Utilisateur{
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Poste poste ;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+    private Departement departement ;
+
 
 }
