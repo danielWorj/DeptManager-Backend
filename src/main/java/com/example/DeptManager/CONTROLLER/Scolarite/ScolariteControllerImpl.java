@@ -2,6 +2,7 @@ package com.example.DeptManager.CONTROLLER.Scolarite;
 
 import com.example.DeptManager.DTO.DocumentDTO;
 import com.example.DeptManager.DTO.MatiereDTO;
+import com.example.DeptManager.DTO.RepartitionDTO;
 import com.example.DeptManager.ENTITY.Scolarite.AnneeAcademique;
 import com.example.DeptManager.ENTITY.Scolarite.Documentation.Document;
 import com.example.DeptManager.ENTITY.Scolarite.Matiere;
@@ -87,7 +88,9 @@ public class ScolariteControllerImpl implements ScolariteControllerInt {
 
         matiereDB.setDepartement(this.departementRepository.findById(matiereDTO.getDepartement()).orElse(null));
         matiereDB.setIntitule(matiereDTO.getIntitule());
-
+        matiereDB.setCode(matiereDTO.getCode());
+        matiereDB.setCredit(matiereDTO.getCredit());
+        matiereDB.setSeance(matiereDTO.getSeance());
         return ResponseEntity.ok(new ServerReponse("Creation de la matiere", true));
     }
 
@@ -296,6 +299,49 @@ public class ScolariteControllerImpl implements ScolariteControllerInt {
     public ResponseEntity<ServerReponse> deleteDocument(Integer id) {
         this.documentRepository.deleteById(id);
         return ResponseEntity.ok(new ServerReponse("Document supprime avec success", true));
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> createRepartition(String repartition) {
+        RepartitionDTO repartitionDTO = new ObjectMapper().readValue(repartition,RepartitionDTO.class);
+        Repartition repartitionDB = new Repartition();
+
+        repartitionDB.setEnseignant(this.enseignantRepository.findById(repartitionDTO.getEnseignant()).orElse(null));
+        repartitionDB.setNiveau(this.niveauRepository.findById(repartitionDTO.getNiveau()).orElse(null));
+        repartitionDB.setFiliere(this.filiereRepository.findById(repartitionDTO.getFiliere()).orElse(null));
+        repartitionDB.setSemestre(this.semestreRepository.findById(repartitionDTO.getSemestre()).orElse(null));
+        repartitionDB.setMatiere(this.matiereRepository.findById(repartitionDTO.getMatiere()).orElse(null));
+
+        this.repartitionRepository.save(repartitionDB);
+        return ResponseEntity.ok(new ServerReponse("repartition cree avec success", true));
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> updateRepartition(String repartition) {
+        RepartitionDTO repartitionDTO = new ObjectMapper().readValue(repartition,RepartitionDTO.class);
+        Repartition repartitionUpdating = this.repartitionRepository.findById(repartitionDTO.getId()).orElse(null);
+
+        if (Objects.nonNull(repartitionUpdating)){
+            Repartition repartitionDB = new Repartition();
+
+            repartitionDB.setEnseignant(this.enseignantRepository.findById(repartitionDTO.getEnseignant()).orElse(null));
+            repartitionDB.setNiveau(this.niveauRepository.findById(repartitionDTO.getNiveau()).orElse(null));
+            repartitionDB.setFiliere(this.filiereRepository.findById(repartitionDTO.getFiliere()).orElse(null));
+            repartitionDB.setSemestre(this.semestreRepository.findById(repartitionDTO.getSemestre()).orElse(null));
+            repartitionDB.setMatiere(this.matiereRepository.findById(repartitionDTO.getMatiere()).orElse(null));
+
+            this.repartitionRepository.save(repartitionDB);
+            return ResponseEntity.ok(new ServerReponse("repartition mis a jour avec success", true));
+
+        }else{
+            return ResponseEntity.ok(new ServerReponse("Erreur de mise a jour repartition", true));
+        }
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> deleteRepartition(Integer id) {
+        this.repartitionRepository.deleteById(id);
+        return ResponseEntity.ok(new ServerReponse("delete repartition successfully",true));
     }
 
     @Override

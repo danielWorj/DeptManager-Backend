@@ -55,6 +55,12 @@ public interface ScolariteControllerInt {
 
 
     //Repartition
+    @PostMapping("/repartition/create")
+    ResponseEntity<ServerReponse> createRepartition(@RequestParam("repartition") String repartition) ;
+    @PostMapping("/repartition/update")
+    ResponseEntity<ServerReponse> updateRepartition(@RequestParam("repartition") String repartition) ;
+    @GetMapping("/repartition/delete/{id}")
+    ResponseEntity<ServerReponse> deleteRepartition(@PathVariable Integer id);
     @GetMapping("/repartition/all/byenseignant/{id}")
     ResponseEntity<List<Repartition>> findAllRepartitionByEnseignant(@PathVariable Integer id);
     @GetMapping("/repartition/all/byfiliere/{id}")
