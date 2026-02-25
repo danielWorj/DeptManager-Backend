@@ -5,12 +5,10 @@ import com.example.DeptManager.DTO.MatiereDTO;
 import com.example.DeptManager.ENTITY.Scolarite.AnneeAcademique;
 import com.example.DeptManager.ENTITY.Scolarite.Documentation.Document;
 import com.example.DeptManager.ENTITY.Scolarite.Matiere;
+import com.example.DeptManager.ENTITY.Scolarite.Repartition;
 import com.example.DeptManager.ENTITY.Server.ServerReponse;
 import com.example.DeptManager.ENTITY.Structure.Filiere;
-import com.example.DeptManager.REPOSITORY.Scolarite.AnneeAcademiqueRepository;
-import com.example.DeptManager.REPOSITORY.Scolarite.DocumentRepository;
-import com.example.DeptManager.REPOSITORY.Scolarite.MatiereRepository;
-import com.example.DeptManager.REPOSITORY.Scolarite.TypeDocumentRepository;
+import com.example.DeptManager.REPOSITORY.Scolarite.*;
 import com.example.DeptManager.REPOSITORY.Structure.DepartementRepository;
 import com.example.DeptManager.REPOSITORY.Structure.FiliereRepository;
 import com.example.DeptManager.REPOSITORY.Structure.NiveauRepository;
@@ -49,6 +47,10 @@ public class ScolariteControllerImpl implements ScolariteControllerInt {
     private NiveauRepository niveauRepository;
     @Autowired
     private EnseignantRepository enseignantRepository;
+    @Autowired
+    private RepartitionRepository repartitionRepository;
+    @Autowired
+    private SemestreRepository semestreRepository;
 
 
     private static String folderFile = System.getProperty("user.dir")+"/src/main/resources/templates/deptwebapp/public/assets/file"; //chemin a déinir
@@ -295,4 +297,63 @@ public class ScolariteControllerImpl implements ScolariteControllerInt {
         this.documentRepository.deleteById(id);
         return ResponseEntity.ok(new ServerReponse("Document supprime avec success", true));
     }
+
+    @Override
+    public ResponseEntity<List<Repartition>> findAllRepartitionByEnseignant(Integer id) {
+        return ResponseEntity.ok(
+                this.repartitionRepository.findByEnseignant(
+                        this.enseignantRepository.findById(id).orElse(null)
+                )
+        );
+    }
+
+    @Override
+    public ResponseEntity<List<Repartition>> findAllRepartitionByFiliere(Integer id) {
+        return ResponseEntity.ok(
+                this.repartitionRepository.findByFiliere(
+                        this.filiereRepository.findById(id).orElse(null)
+                )
+        );
+    }
+
+    @Override
+    public ResponseEntity<List<Repartition>> findAllRepartitionByMatiere(Integer id) {
+        return ResponseEntity.ok(
+                this.repartitionRepository.findByMatiere(
+                        this.matiereRepository.findById(id).orElse(null)
+                )
+        );
+    }
+
+    @Override
+    public ResponseEntity<List<Repartition>> findAllRepartitionBySemestre(Integer id) {
+        return ResponseEntity.ok(
+                this.repartitionRepository.findBySemestre(
+                        this.semestreRepository.findById(id).orElse(null)
+                )
+        );
+    }
+
+    @Override
+    public ResponseEntity<List<Repartition>> findAllRepartitionByFiliereAndNiveau(Integer idF, Integer idN) {
+        return ResponseEntity.ok(
+                this.repartitionRepository.findByFiliereAndNiveau(
+                        this.filiereRepository.findById(idF).orElse(null),
+                        this.niveauRepository.findById(idN).orElse(null)
+                )
+        );
+    }
+
+    @Override
+    public ResponseEntity<List<Repartition>> findAllRepartitionByFiliereAndNiveauAndSemestre(Integer idF, Integer idN, Integer idS) {
+        return ResponseEntity.ok(
+                this.repartitionRepository.findByFiliereAndNiveauAndSemestre(
+                        this.filiereRepository.findById(idF).orElse(null),
+                        this.niveauRepository.findById(idN).orElse(null),
+                        this.semestreRepository.findById(idS).orElse(null)
+                )
+        );
+    }
+
+
 }

@@ -6,12 +6,9 @@ import lombok.Data;
 @Entity
 @Table
 @Data
-public class Departement {
+public class TypePieceJointeRequete {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id ;
-    private String abreviation ;
-    private String intitule ;
-    @Lob
-    private String description ; //Description du departement
+    private String intitule;
 }

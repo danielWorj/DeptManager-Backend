@@ -2,6 +2,7 @@ package com.example.DeptManager.CONTROLLER.Scolarite;
 
 import com.example.DeptManager.ENTITY.Scolarite.Documentation.Document;
 import com.example.DeptManager.ENTITY.Scolarite.Matiere;
+import com.example.DeptManager.ENTITY.Scolarite.Repartition;
 import com.example.DeptManager.ENTITY.Server.ServerReponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +28,7 @@ public interface ScolariteControllerInt {
     @GetMapping("/matiere/delete/{id}")
     ResponseEntity<ServerReponse> deleteMatiere(@PathVariable Integer id);
 
-
-
-
     ///Documention
-
 
     @GetMapping("/document/all")
     ResponseEntity<List<Document>> findAllDocument();
@@ -55,6 +52,24 @@ public interface ScolariteControllerInt {
     ResponseEntity<ServerReponse> updateDocumentD(@RequestParam("document") String document, @RequestParam("file") MultipartFile file) throws IOException;
     @GetMapping("/document/delete/{id}")
     ResponseEntity<ServerReponse> deleteDocument(@PathVariable Integer id);
+
+
+    //Repartition
+    @GetMapping("/repartition/all/byenseignant/{id}")
+    ResponseEntity<List<Repartition>> findAllRepartitionByEnseignant(@PathVariable Integer id);
+    @GetMapping("/repartition/all/byfiliere/{id}")
+    ResponseEntity<List<Repartition>> findAllRepartitionByFiliere(@PathVariable Integer id);
+    @GetMapping("/repartition/all/bymatiere/{id}")
+    ResponseEntity<List<Repartition>> findAllRepartitionByMatiere(@PathVariable Integer id);
+    @GetMapping("/repartition/all/bysemestre/{id}")
+    ResponseEntity<List<Repartition>> findAllRepartitionBySemestre(@PathVariable Integer id);
+    @GetMapping("/repartition/all/by/filiere/niveau/{idF}/{idN}")
+    ResponseEntity<List<Repartition>> findAllRepartitionByFiliereAndNiveau(@PathVariable Integer idF, @PathVariable Integer idN);
+    @GetMapping("/repartition/all/by/filiere/niveau/semestre/{idF}/{idN}/{idS}")
+    ResponseEntity<List<Repartition>> findAllRepartitionByFiliereAndNiveauAndSemestre(@PathVariable Integer idF, @PathVariable Integer idN, @PathVariable Integer idS);
+
+
+
 
 
 }

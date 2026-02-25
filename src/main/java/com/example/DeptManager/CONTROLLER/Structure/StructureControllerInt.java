@@ -1,14 +1,15 @@
 package com.example.DeptManager.CONTROLLER.Structure;
 
+import com.example.DeptManager.ENTITY.Scolarite.AnneeAcademique;
+import com.example.DeptManager.ENTITY.Scolarite.Documentation.TypeDocument;
 import com.example.DeptManager.ENTITY.Server.ServerReponse;
-import com.example.DeptManager.ENTITY.Structure.Departement;
-import com.example.DeptManager.ENTITY.Structure.Filiere;
-import com.example.DeptManager.ENTITY.Structure.Niveau;
-import com.example.DeptManager.ENTITY.Structure.Salle;
+import com.example.DeptManager.ENTITY.Structure.*;
 import com.example.DeptManager.ENTITY.Utilisateur.Poste;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/deptmanager/api/structure/")
@@ -61,6 +62,57 @@ public interface StructureControllerInt {
     ResponseEntity<List<Poste>> findAllPoste();
     @PostMapping("/poste/create")
     ResponseEntity<ServerReponse> createPoste(@RequestParam("poste") String poste);
+    //Annee Academique
+    @GetMapping("/anneeacademique/all")
+    ResponseEntity<List<AnneeAcademique>> findAllAnneeAcademique();
 
+    //Type Document
+    @GetMapping("/typedocument/all")
+    ResponseEntity<List<TypeDocument>> findAllTypeDocument();
+
+
+
+    //Debouche
+
+    @GetMapping("/debouche/byfiliere/{id}")
+    ResponseEntity<List<Debouche>> findAllDeboucheByFiliere(@PathVariable Integer id);
+    @PostMapping("/debouche/create")
+    ResponseEntity<ServerReponse> createDebouche(@RequestParam("debouche") String debouche);
+    @PostMapping("/debouche/update")
+    ResponseEntity<ServerReponse> updateDebouche(@RequestParam("debouche") String debouche);
+    @GetMapping("/debouche/delete/{id}")
+    ResponseEntity<ServerReponse> deleteDebouche(@PathVariable Integer id);
+
+
+    //Media
+    @PostMapping("/media/create")
+    ResponseEntity<ServerReponse> createMedia(@RequestParam("media") String media , @RequestParam("file")MultipartFile fichier) throws IOException;
+    @GetMapping("/media/all/bydepartement/{id}")
+    ResponseEntity<List<Media>> findAllMediaByDepartement(@PathVariable Integer id);
+    @GetMapping("/media/delete/{id}")
+    ResponseEntity<ServerReponse> deleteMedia(@PathVariable Integer id);
+
+    //Requete
+    @GetMapping("/requete/all")
+    ResponseEntity<List<Requete>> findAllRequete();
+    @GetMapping("/requete/allbymotif/{id}")
+    ResponseEntity<List<Requete>> findAllRequeteByMotif(@PathVariable Integer id);
+    @PostMapping("/requete/creation")
+    ResponseEntity<ServerReponse> creationRequete(@RequestParam("requete") String requete);
+    @PostMapping("/requete/update")
+    ResponseEntity<ServerReponse> updateRequete(@RequestParam("requete") String requete);
+    @GetMapping("/requete/delete/{id}")
+    ResponseEntity<ServerReponse> deleteRequete(@PathVariable Integer id);
+    @GetMapping("/requete/change/{idR}/{idS}")
+    ResponseEntity<ServerReponse> changeRequeteStatut(@PathVariable Integer idR, @PathVariable Integer idS);
+    @GetMapping("/requete/motif/all")
+    ResponseEntity<List<MotifRequete>> findAllMotifRequete();
+
+
+    //Piece jointe
+    @GetMapping("/requete/all/piecejointe/{id}")
+    ResponseEntity<List<PieceJointeRequete>> findAllPieceByRequete(@PathVariable Integer id);
+    @PostMapping("/requete/piecejointe/create")
+    ResponseEntity<ServerReponse> createPieceJointeRequete(@RequestParam("piece") String piece , @RequestParam("file") MultipartFile file) throws IOException;
 
 }

@@ -1,38 +1,24 @@
-package com.example.DeptManager.ENTITY.Scolarite.Documentation;
+package com.example.DeptManager.ENTITY.Scolarite;
 
-import com.example.DeptManager.ENTITY.Scolarite.AnneeAcademique;
-import com.example.DeptManager.ENTITY.Scolarite.Matiere;
-import com.example.DeptManager.ENTITY.Structure.Departement;
 import com.example.DeptManager.ENTITY.Structure.Filiere;
 import com.example.DeptManager.ENTITY.Structure.Niveau;
+import com.example.DeptManager.ENTITY.Structure.Semestre;
 import com.example.DeptManager.ENTITY.Utilisateur.Enseignant;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
-
 @Entity
-@Data
 @Table
-public class Document {
+@Data
+public class Repartition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id ;
-    private String url ;
-    private LocalDate dateC;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private TypeDocument typeDocument ;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Matiere matiere ;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Departement departement ;
+    private Enseignant enseignant ;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
@@ -44,10 +30,10 @@ public class Document {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Enseignant enseignant ;
+    private Matiere matiere ;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private AnneeAcademique anneeAcademique ;
+    private Semestre semestre ;
 
 }
