@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChefDepartementRepository extends JpaRepository<ChefDepartement,Integer> {
-    List<ChefDepartement> findByDepartement(Departement departement);
+    Optional<ChefDepartement> findByDepartement(Departement departement);
 }

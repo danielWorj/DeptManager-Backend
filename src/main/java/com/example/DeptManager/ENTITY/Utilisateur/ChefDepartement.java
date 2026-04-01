@@ -1,16 +1,29 @@
 package com.example.DeptManager.ENTITY.Utilisateur;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import com.example.DeptManager.ENTITY.Structure.Departement;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Data
-@DiscriminatorValue(value = "etudiant")
-public class ChefDepartement extends Enseignant{
 
-    String diplome ;
-    Integer anneeexperience ;
-    String labo ;
-    String bureau ;
+public class ChefDepartement{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Enseignant enseignant;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Departement departement;
+
+    private String diplome ;
+    private Integer anneeexperience ;
+    private String bureau ;
+    private LocalDate dateDebut;
+    private LocalDate dateTime ;
 }

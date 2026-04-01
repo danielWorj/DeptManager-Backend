@@ -64,6 +64,17 @@ public class UtilisateurControllerImpl implements UtilisateurControllerInt{
     }
 
     @Override
+    public ResponseEntity<Integer> countAllEnseignantByDepartement(Integer id) {
+        return ResponseEntity.ok(
+                this.enseignantRepository.findByDepartement(
+                        this.departementRepository.findById(id).orElse(null)
+                ).size()
+        );
+    }
+
+
+
+    @Override
     public ResponseEntity<ServerReponse> createEnseignant(String enseignant) {
         EnseignantDTO enseignantDTO = new ObjectMapper().readValue(enseignant, EnseignantDTO.class);
 
@@ -144,6 +155,22 @@ public class UtilisateurControllerImpl implements UtilisateurControllerInt{
     public ResponseEntity<Long> countAllEtudiant() {
         return ResponseEntity.ok(
                 this.etudiantRepository.count()
+        );
+    }
+
+    @Override
+    public ResponseEntity<Integer> countAllEtudiantByDepartement(Integer id) {
+        return ResponseEntity.ok(
+                this.etudiantRepository.findAllEtudiantByDepartement(id).size()
+        );
+    }
+
+    @Override
+    public ResponseEntity<Integer> countAllEtudiantByFiliere(Integer id) {
+        return ResponseEntity.ok(
+                this.etudiantRepository.findByFiliere(
+                        this.filiereRepository.findById(id).orElse(null)
+                ).size()
         );
     }
 
@@ -238,41 +265,26 @@ public class UtilisateurControllerImpl implements UtilisateurControllerInt{
 
     @Override
     public ResponseEntity<ChefDepartement> findChefDepartementById(Integer id) {
-        System.out.println(this.chefDepartementRepository.findByDepartement(
+        return ResponseEntity.ok(this.chefDepartementRepository.findByDepartement(
                 this.departementRepository.findById(id).orElse(null)
-        ));
-        Departement departement = this.departementRepository.findById(id).orElse(null);
-        //System.out.println("Voici l enseignant :"+enseignant);
-        //ChefDepartement chefDepartement = this.chefDepartementRepository.findByDepartement(departement);
-        //System.out.println("Voici le chef de departement" + chefDepartement);
-
-        System.out.println("liste des chef :"+this.chefDepartementRepository.findByDepartement(departement));
-
-        return ResponseEntity.ok(null);
+        ).orElse(null));
     }
 
     @Override
     public ResponseEntity<ServerReponse> createChefDepartement(String chef) {
         ChefDeptDTO chefDeptDTO = new ObjectMapper().readValue(chef,ChefDeptDTO.class);
         Enseignant enseignant = this.enseignantRepository.findById(chefDeptDTO.getEnseignant()).orElse(null);
+        Departement departement = this.departementRepository.findById(chefDeptDTO.getDepartement()).orElse(null);
+
 
         ChefDepartement chefDepartement= new ChefDepartement();
 
-        chefDepartement.setDepartement(enseignant.getDepartement());
-        chefDepartement.setPoste(enseignant.getPoste());
-
-        chefDepartement.setNom(enseignant.getNom());
-        chefDepartement.setPrenom(enseignant.getPrenom());
-        chefDepartement.setEmail(enseignant.getEmail());
-        chefDepartement.setTelephone(enseignant.getTelephone());
-        chefDepartement.setRole(1);
-        chefDepartement.setStatus(false);
-        chefDepartement.setDateCreation(LocalDate.now());
+        chefDepartement.setEnseignant(enseignant);
+        chefDepartement.setDepartement(departement);
 
         chefDepartement.setAnneeexperience(chefDeptDTO.getAnneeexperience());
         chefDepartement.setDiplome(chefDeptDTO.getDiplome());
         chefDepartement.setBureau(chefDeptDTO.getBureau());
-        chefDepartement.setLabo(chefDeptDTO.getLabo());
 
         this.chefDepartementRepository.save(chefDepartement);
         return ResponseEntity.ok(new ServerReponse("Chef de departement cree", true));
@@ -283,26 +295,16 @@ public class UtilisateurControllerImpl implements UtilisateurControllerInt{
         ChefDeptDTO chefDeptDTO = new ObjectMapper().readValue(chef,ChefDeptDTO.class);
         Enseignant enseignant = this.enseignantRepository.findById(chefDeptDTO.getEnseignant()).orElse(null);
         ChefDepartement chefDepartementUpdating = this.chefDepartementRepository.findById(enseignant.getId()).orElse(null);
-
-
+        Departement departement = this.departementRepository.findById(chefDeptDTO.getDepartement()).orElse(null);
         ChefDepartement chefDepartement= new ChefDepartement();
 
-        chefDepartement.setId(enseignant.getId());
-        chefDepartement.setDepartement(enseignant.getDepartement());
-        chefDepartement.setPoste(enseignant.getPoste());
-
-        chefDepartement.setNom(enseignant.getNom());
-        chefDepartement.setPrenom(enseignant.getPrenom());
-        chefDepartement.setEmail(enseignant.getEmail());
-        chefDepartement.setTelephone(enseignant.getTelephone());
-        chefDepartement.setRole(1);
-        chefDepartement.setStatus(false);
-        chefDepartement.setDateCreation(LocalDate.now());
+        chefDepartement.setId(chefDeptDTO.getId());
+        chefDepartement.setEnseignant(enseignant);
+        chefDepartement.setDepartement(departement);
 
         chefDepartement.setAnneeexperience(chefDeptDTO.getAnneeexperience());
         chefDepartement.setDiplome(chefDeptDTO.getDiplome());
         chefDepartement.setBureau(chefDeptDTO.getBureau());
-        chefDepartement.setLabo(chefDeptDTO.getLabo());
 
         this.chefDepartementRepository.save(chefDepartement);
         return ResponseEntity.ok(new ServerReponse("Mise a jour chef departement", true));

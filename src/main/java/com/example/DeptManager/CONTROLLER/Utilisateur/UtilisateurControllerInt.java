@@ -21,6 +21,9 @@ public interface UtilisateurControllerInt {
     ResponseEntity<Enseignant> findEnseignantById(@PathVariable Integer id);
     @GetMapping("/enseignant/count")
     ResponseEntity<Long> countAllEnseignant();
+    @GetMapping("/enseignant/countbydept/{id}")
+    ResponseEntity<Integer> countAllEnseignantByDepartement(@PathVariable Integer id);
+
 
     @PostMapping("/enseignant/create")
     ResponseEntity<ServerReponse> createEnseignant(@RequestParam("enseignant") String enseignant);
@@ -37,6 +40,10 @@ public interface UtilisateurControllerInt {
     ResponseEntity<Etudiant> findEtudiantById(@PathVariable Integer id);
     @GetMapping("/etudiant/count")
     ResponseEntity<Long> countAllEtudiant();
+    @GetMapping("/etudiant/countbydept/{id}")
+    ResponseEntity<Integer> countAllEtudiantByDepartement(@PathVariable Integer id);
+    @GetMapping("/etudiant/countbyfil/{id}")
+    ResponseEntity<Integer> countAllEtudiantByFiliere(@PathVariable Integer id);
     @PostMapping("/etudiant/create")
     ResponseEntity<ServerReponse> createEtudiant(@RequestParam("etudiant") String enseignant);
     @PostMapping("/etudiant/update")
@@ -49,7 +56,6 @@ public interface UtilisateurControllerInt {
     ResponseEntity<List<Etudiant>> findAllEtudiantByFiliereAndNiveau(@PathVariable Integer idF, @PathVariable Integer idN);
     @GetMapping("/etudiant/byannee/byfiliere/byniveau/{idA}/{idF}/{idN}")
     ResponseEntity<List<Etudiant>> findAllEtudiantByFiliereAndNiveau(@PathVariable Integer idA, @PathVariable Integer idF, @PathVariable Integer idN);
-
 
     //CHEF DEPARTEMENT
 
