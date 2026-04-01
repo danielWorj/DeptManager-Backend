@@ -1,5 +1,6 @@
 package com.example.DeptManager.REPOSITORY.Utilisateur;
 
+import com.example.DeptManager.ENTITY.Scolarite.AnneeAcademique;
 import com.example.DeptManager.ENTITY.Structure.Departement;
 import com.example.DeptManager.ENTITY.Structure.Filiere;
 import com.example.DeptManager.ENTITY.Structure.Niveau;
@@ -19,4 +20,5 @@ public interface EtudiantRepository extends JpaRepository<Etudiant,Integer> {
     List<Etudiant> findByFiliere(Filiere filiere);
     List<Etudiant> findByNiveauAndFiliere(Niveau niveau, Filiere filiere);
     List<Etudiant> findByFiliereAndNiveau(Filiere filiere, Niveau niveau);
+    List<Etudiant> findByAnneeAcademiqueAndFiliereAndNiveau(AnneeAcademique anneeAcademique,  Filiere filiere, Niveau niveau);
 }

@@ -4,6 +4,7 @@ import com.example.DeptManager.ENTITY.Scolarite.Documentation.Document;
 import com.example.DeptManager.ENTITY.Scolarite.Matiere;
 import com.example.DeptManager.ENTITY.Scolarite.Repartition;
 import com.example.DeptManager.ENTITY.Server.ServerReponse;
+import com.example.DeptManager.ENTITY.Structure.Semestre;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,6 +77,17 @@ public interface ScolariteControllerInt {
 
 
 
+    //Scolarite
+    @GetMapping("/semestre/all")
+    ResponseEntity<List<Semestre>> findAllSemestre();
+    @GetMapping("/semestre/all/byannee/{id}")
+    ResponseEntity<List<Semestre>> findAllSemestreByAnnee(@PathVariable Integer id);
+    @PostMapping("/semestre/create")
+    ResponseEntity<ServerReponse> createSemestre(@RequestParam("semestre") String semestre);
+    @PostMapping("/semestre/update")
+    ResponseEntity<ServerReponse> updateSemestre(@RequestParam("semestre") String semestre);
+    @GetMapping("/semestre/delete/{id}")
+    ResponseEntity<ServerReponse> deleteSemestre(@PathVariable Integer id);
 
 
 }

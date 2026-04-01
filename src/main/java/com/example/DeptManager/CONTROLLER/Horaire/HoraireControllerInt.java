@@ -7,6 +7,7 @@ import com.example.DeptManager.ENTITY.Server.ServerReponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/deptmanager/api/horaire/")
@@ -24,10 +25,18 @@ public interface HoraireControllerInt {
     ResponseEntity<ServerReponse> creationHoraire(@RequestParam("horaire") String horaire);
     @PostMapping("/update")
     ResponseEntity<ServerReponse> updateHoraire(@RequestParam("horaire") String horaire);
+    @GetMapping("/all/byrepartition/{idR}")
+    ResponseEntity<Horaire> findAllHoraireByRepartition(@PathVariable Integer idR);
+    @GetMapping("/all/bysalle/jour/periode/{idS}/{idJ}/{idP}")
+    ResponseEntity<Horaire> findAllHoraireBySalleJourAndPeriode(@PathVariable Integer idS , @PathVariable Integer idJ, @PathVariable Integer idP);
     @GetMapping("/all/byfiliere/andniveau/{idF}/{idN}")
     ResponseEntity<List<Horaire>> findAllHoraireByFiliereAndNiveau(@PathVariable Integer idF , @PathVariable Integer idN);
     @GetMapping("/all/byenseignant/{id}")
     ResponseEntity<List<Horaire>> findAllHoraireByEnseignant(@PathVariable Integer id);
+
+    //Generation
+    @GetMapping("/impression/{idF}/{idN}")
+    ResponseEntity<?> impression(@PathVariable Integer idF, @PathVariable Integer idN) throws IOException;
 
 
 }

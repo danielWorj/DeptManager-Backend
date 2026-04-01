@@ -11,4 +11,6 @@ public class MediaDTO {
     private Integer id ;
     private String url ;
     private Integer departement ;
+    private Boolean profil ; //1- OUI 0-NON
+
 }

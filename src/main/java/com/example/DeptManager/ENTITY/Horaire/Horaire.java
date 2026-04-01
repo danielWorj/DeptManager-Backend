@@ -1,6 +1,7 @@
 package com.example.DeptManager.ENTITY.Horaire;
 
 import com.example.DeptManager.ENTITY.Scolarite.Matiere;
+import com.example.DeptManager.ENTITY.Scolarite.Repartition;
 import com.example.DeptManager.ENTITY.Structure.Departement;
 import com.example.DeptManager.ENTITY.Structure.Filiere;
 import com.example.DeptManager.ENTITY.Structure.Niveau;
@@ -20,19 +21,7 @@ public class Horaire {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Enseignant enseignant ;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Filiere filiere ;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Niveau niveau ;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Matiere matiere ;
+    private Repartition repartition ;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})

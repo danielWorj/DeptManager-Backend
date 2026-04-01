@@ -3,12 +3,14 @@ package com.example.DeptManager.CONTROLLER.Scolarite;
 import com.example.DeptManager.DTO.DocumentDTO;
 import com.example.DeptManager.DTO.MatiereDTO;
 import com.example.DeptManager.DTO.RepartitionDTO;
+import com.example.DeptManager.DTO.SemestreDTO;
 import com.example.DeptManager.ENTITY.Scolarite.AnneeAcademique;
 import com.example.DeptManager.ENTITY.Scolarite.Documentation.Document;
 import com.example.DeptManager.ENTITY.Scolarite.Matiere;
 import com.example.DeptManager.ENTITY.Scolarite.Repartition;
 import com.example.DeptManager.ENTITY.Server.ServerReponse;
 import com.example.DeptManager.ENTITY.Structure.Filiere;
+import com.example.DeptManager.ENTITY.Structure.Semestre;
 import com.example.DeptManager.REPOSITORY.Scolarite.*;
 import com.example.DeptManager.REPOSITORY.Structure.DepartementRepository;
 import com.example.DeptManager.REPOSITORY.Structure.FiliereRepository;
@@ -399,6 +401,67 @@ public class ScolariteControllerImpl implements ScolariteControllerInt {
                         this.semestreRepository.findById(idS).orElse(null)
                 )
         );
+    }
+
+    @Override
+    public ResponseEntity<List<Semestre>> findAllSemestre() {
+        return ResponseEntity.ok(
+                this.semestreRepository.findAll(Sort.by(Sort.Direction.DESC,"id"))
+        );
+    }
+
+    @Override
+    public ResponseEntity<List<Semestre>> findAllSemestreByAnnee(Integer id) {
+        return ResponseEntity.ok(
+            this.semestreRepository.findByAnneeAcademique(
+                    this.anneeAcademiqueRepository.findById(id).orElse(null)
+            )
+        );
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> createSemestre(String semestre) {
+        SemestreDTO semestreDTO =  new ObjectMapper().readValue(semestre, SemestreDTO.class);
+
+        Semestre semestreDB = new Semestre();
+
+        semestreDB.setIntitule(semestreDTO.getIntitule());
+        semestreDB.setAnneeAcademique(
+                this.anneeAcademiqueRepository.findById(semestreDTO.getAnneeAcademique()).orElse(null)
+        );
+
+        this.semestreRepository.save(semestreDB);
+        return ResponseEntity.ok(new ServerReponse("semestre creee", true));
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> updateSemestre(String semestre) {
+        SemestreDTO semestreDTO =  new ObjectMapper().readValue(semestre, SemestreDTO.class);
+        Semestre semestreUpdating = this.semestreRepository.findById(semestreDTO.getId()).orElse(null);
+
+        if (Objects.nonNull(semestreUpdating)){
+            Semestre semestreDB = new Semestre();
+
+            semestreDB.setIntitule(semestreDTO.getIntitule());
+            semestreDB.setId(semestreUpdating.getId());
+            semestreDB.setAnneeAcademique(
+                    this.anneeAcademiqueRepository.findById(semestreDTO.getAnneeAcademique()).orElse(null)
+            );
+
+            this.semestreRepository.save(semestreDB);
+            return ResponseEntity.ok(new ServerReponse("semestre mis a jour ", true));
+        }else{
+            return ResponseEntity.ok(new ServerReponse("Erreur de mise a jour du semestre ", true));
+
+        }
+
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> deleteSemestre(Integer id) {
+        this.semestreRepository.deleteById(id);
+        return ResponseEntity.ok(new ServerReponse("Semestre supprime avec success ", true));
+
     }
 
 

@@ -14,4 +14,8 @@ public class Departement {
     private String intitule ;
     @Lob
     private String description ; //Description du departement
+    @Lob
+    private String motChef ;
+    private String nomChef ;
+    private String admission ;
 }

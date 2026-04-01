@@ -20,7 +20,7 @@ public class Utilisateur {
     private String email;
     private String telephone ;
     private String password;
-    private Integer role ;
+    private Integer role ; //1
     private Boolean status ;
     private String photo ;
 

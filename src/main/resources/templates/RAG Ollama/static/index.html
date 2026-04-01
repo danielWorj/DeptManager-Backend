@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RAG - Test</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,sans-serif;background:#f4f4f5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .wrap{width:100%;max-width:700px;display:flex;flex-direction:column;gap:16px}
+  h1{font-size:1.2rem;font-weight:600;color:#18181b}
+  .card{background:#fff;border:1px solid #e4e4e7;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px}
+  .card-title{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#71717a}
+  textarea{width:100%;padding:10px 12px;border:1px solid #e4e4e7;border-radius:8px;font-size:.9rem;font-family:inherit;outline:none;transition:border-color .15s;resize:vertical;min-height:80px}
+  textarea:focus{border-color:#6366f1}
+  button{padding:10px 18px;border:none;border-radius:8px;font-size:.875rem;font-weight:500;cursor:pointer;transition:opacity .15s}
+  button:hover{opacity:.85} button:disabled{opacity:.4;cursor:not-allowed}
+  .btn-primary{background:#6366f1;color:#fff}
+  .btn-green{background:#16a34a;color:#fff}
+  .result{background:#f9fafb;border:1px solid #e4e4e7;border-radius:8px;padding:14px;font-size:.875rem;line-height:1.7;color:#27272a;white-space:pre-wrap;min-height:48px}
+  .sources{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .chip{padding:3px 10px;border-radius:99px;background:#ede9fe;color:#4c1d95;font-size:.75rem;font-family:monospace}
+  .status-row{display:flex;gap:8px;flex-wrap:wrap}
+  .stat{flex:1;min-width:120px;background:#f9fafb;border:1px solid #e4e4e7;border-radius:8px;padding:10px 14px}
+  .stat-label{font-size:.7rem;color:#71717a;margin-bottom:2px}
+  .stat-val{font-size:.9rem;font-weight:500;color:#18181b}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:#d1d5db}
+  .dot.ok{background:#16a34a} .dot.err{background:#dc2626}
+  .log{background:#18181b;color:#a3e635;border-radius:8px;padding:12px 14px;font-family:monospace;font-size:.78rem;min-height:36px;line-height:1.6;word-break:break-word}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>RAG - Page de test</h1>
+
+  <div class="card">
+    <div class="card-title">Statut systeme</div>
+    <div class="status-row">
+      <div class="stat"><div class="stat-label">Groq</div><div class="stat-val" id="sGroq">—</div></div>
+      <div class="stat"><div class="stat-label">Modele</div><div class="stat-val" id="sModel">—</div></div>
+      <div class="stat"><div class="stat-label">PDFs</div><div class="stat-val" id="sDocs">—</div></div>
+      <div class="stat"><div class="stat-label">Chunks</div><div class="stat-val" id="sChunks">—</div></div>
+    </div>
+    <button class="btn-primary" onclick="loadStatus()">Rafraichir le statut</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Indexation des PDFs</div>
+    <p style="font-size:.85rem;color:#52525b">Indexe tous les PDFs du dossier docs/.</p>
+    <button class="btn-green" id="btnIndex" onclick="indexDocs()">Lancer l indexation</button>
+    <div class="log" id="indexLog">En attente...</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Poser une question</div>
+    <textarea id="question" placeholder="Ex : Quels sont les points cles du document ?"></textarea>
+    <button class="btn-primary" id="btnQuery" onclick="sendQuery()">Envoyer</button>
+    <div class="result" id="answer">La reponse apparaitra ici...</div>
+    <div class="sources" id="sources"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">JSON brut</div>
+    <div class="log" id="rawJson" style="color:#93c5fd">—</div>
+  </div>
+</div>
+
+<script>
+async function loadStatus() {
+  try {
+    var r = await fetch('/api/status');
+    var d = await r.json();
+    var ok = d.ollama_connected;
+    document.getElementById('sGroq').innerHTML = '<span class="dot ' + (ok ? 'ok' : 'err') + '"></span>' + (ok ? 'Connecte' : 'Hors ligne');
+    document.getElementById('sModel').textContent = d.chat_model || '—';
+    document.getElementById('sDocs').textContent = (d.docs_found || []).length + ' fichier(s)';
+    document.getElementById('sChunks').textContent = d.chunks_indexed || '0';
+    document.getElementById('rawJson').textContent = JSON.stringify(d, null, 2);
+  } catch(e) {
+    document.getElementById('sGroq').innerHTML = '<span class="dot err"></span>Erreur reseau';
+    document.getElementById('rawJson').textContent = e.message;
+  }
+}
+
+async function indexDocs() {
+  var btn = document.getElementById('btnIndex');
+  var log = document.getElementById('indexLog');
+  btn.disabled = true;
+  log.textContent = 'Indexation en cours...';
+  try {
+    var r = await fetch('/api/index', {method: 'POST'});
+    var d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    log.textContent = 'OK - ' + d.indexed_files.length + ' PDF(s), ' + d.total_chunks + ' chunks\n' + d.indexed_files.join(', ');
+    loadStatus();
+  } catch(e) {
+    log.textContent = 'ERREUR : ' + e.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function sendQuery() {
+  var q = document.getElementById('question').value.trim();
+  if (!q) return;
+  var btn = document.getElementById('btnQuery');
+  var ans = document.getElementById('answer');
+  btn.disabled = true;
+  ans.textContent = 'Chargement...';
+  document.getElementById('sources').innerHTML = '';
+  try {
+    var r = await fetch('/api/query', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({question: q})
+    });
+    var d = await r.json();
+    document.getElementById('rawJson').textContent = JSON.stringify(d, null, 2);
+    if (!r.ok) throw new Error(d.error);
+    ans.textContent = d.answer;
+    var chips = (d.sources || []).map(function(s) {
+      return '<span class="chip">' + s.source + ' p.' + s.page + ' - ' + (s.score * 100).toFixed(1) + '%</span>';
+    }).join('');
+    document.getElementById('sources').innerHTML = chips;
+  } catch(e) {
+    ans.textContent = 'ERREUR : ' + e.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+loadStatus();
+</script>
+</body>
+</html>

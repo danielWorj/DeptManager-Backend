@@ -11,4 +11,5 @@ public class AnneeAcademique {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String intitule ;
+    private Boolean status ; //Active 1 : Inactive 0
 }

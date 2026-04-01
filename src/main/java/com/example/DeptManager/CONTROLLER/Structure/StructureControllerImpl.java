@@ -5,6 +5,7 @@ import com.example.DeptManager.ENTITY.Scolarite.AnneeAcademique;
 import com.example.DeptManager.ENTITY.Scolarite.Documentation.TypeDocument;
 import com.example.DeptManager.ENTITY.Server.ServerReponse;
 import com.example.DeptManager.ENTITY.Structure.*;
+import com.example.DeptManager.ENTITY.Utilisateur.ChefDepartement;
 import com.example.DeptManager.ENTITY.Utilisateur.Poste;
 import com.example.DeptManager.REPOSITORY.Scolarite.AnneeAcademiqueRepository;
 import com.example.DeptManager.REPOSITORY.Scolarite.TypeDocumentRepository;
@@ -57,12 +58,24 @@ public class StructureControllerImpl implements StructureControllerInt{
     private TypePieceJointeRequeteRepository typePieceJointeRequeteRepository;
     @Autowired
     private StatutRequeteRepository statutRequeteRepository;
+    @Autowired
+    private ChefDepartementRepository chefDepartementRepository;
+    @Autowired
+    private MotChefDepartementRepository motChefDepartementRepository;
+    @Autowired
+    private SecteurActiviteRepository secteurActiviteRepository;
+
     private static String folderFile = System.getProperty("user.dir")+"/src/main/resources/templates/deptwebapp/public/assets/file"; //chemin a déinir
 
 
     @Override
     public ResponseEntity<List<Departement>> findAllDepartement() {
         return ResponseEntity.ok(this.departementRepository.findAll());
+    }
+
+    @Override
+    public ResponseEntity<Departement> findDepartementById(Integer id) {
+        return ResponseEntity.ok(this.departementRepository.findById(id).orElse(null));
     }
 
     @Override
@@ -154,6 +167,10 @@ public class StructureControllerImpl implements StructureControllerInt{
 
 
     }
+    @Override
+    public ResponseEntity<Filiere> getFiliereById(Integer id) {
+        return ResponseEntity.ok(this.filiereRepository.findById(id).orElse(null));
+    }
 
     @Override
     public ResponseEntity<ServerReponse> deleteFiliere(Integer id) {
@@ -243,6 +260,13 @@ public class StructureControllerImpl implements StructureControllerInt{
     }
 
     @Override
+    public ResponseEntity<List<Debouche>> findAllDeboucheByDepartement(Integer id) {
+        return ResponseEntity.ok(
+                this.deboucheRepository.findByDepartement(id)
+        );
+    }
+
+    @Override
     public ResponseEntity<ServerReponse> createDebouche(String debouche) {
         DeboucheDTO deboucheDTO = new ObjectMapper().readValue(debouche, DeboucheDTO.class);
 
@@ -293,7 +317,7 @@ public class StructureControllerImpl implements StructureControllerInt{
         Media mediaDB = new Media();
 
         mediaDB.setDepartement(this.departementRepository.findById(mediaDTO.getDepartement()).orElse(null));
-
+        mediaDB.setProfil(false);
         String fileName ;
         if (!fichier.isEmpty()){
             //S'il n'y a pas de fichier
@@ -328,6 +352,34 @@ public class StructureControllerImpl implements StructureControllerInt{
     public ResponseEntity<ServerReponse> deleteMedia(Integer id) {
         this.mediaRepository.deleteById(id);
         return ResponseEntity.ok(new ServerReponse("Media supprime avec success", true));
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> chargerPhotoProfil(MultipartFile file, String media) throws IOException {
+        MediaDTO mediaDTO = new ObjectMapper().readValue(media, MediaDTO.class);
+
+        Media mediaDB =new Media();
+
+        mediaDB.setProfil(true);
+        mediaDB.setDepartement(this.departementRepository.findById(mediaDTO.getDepartement()).orElse(null));
+
+        String fileName;
+        if (!media.isEmpty()){
+            //S'il n'y a pas de fichier
+            fileName = file.getOriginalFilename(); // le fichier prend le nom du client
+
+            mediaDB.setUrl(fileName);
+
+            System.out.println("le nom du fichier "+ fileName);
+
+            Path path = Paths.get(folderFile,fileName);
+
+            file.transferTo(path);
+
+            System.out.println("media enregistre en base de donnee");
+        }
+        this.mediaRepository.save(mediaDB);
+        return ResponseEntity.ok(new ServerReponse("Image de profil ajoutee", true));
     }
 
     @Override
@@ -444,5 +496,88 @@ public class StructureControllerImpl implements StructureControllerInt{
             System.out.println("piece jointe enregistre en base de donnee");
         }
         return ResponseEntity.ok(new ServerReponse("Piece jointe cree avec success", true));
+    }
+
+
+    @Override
+    public ResponseEntity<ServerReponse> createMotChef(String motChef) {
+        MotChefDepartementDTO motChefDepartementDTO = new ObjectMapper().readValue(motChef, MotChefDepartementDTO.class);
+
+        MotChefDepartement motChefDepartement = new MotChefDepartement();
+
+        motChefDepartement.setDepartement(this.departementRepository.findById(motChefDepartementDTO.getDepartement()).orElse(null));
+        motChefDepartement.setChef(this.chefDepartementRepository.findById(motChefDepartementDTO.getChef()).orElse(null));
+        motChefDepartement.setEnonce(motChefDepartementDTO.getEnonce());
+
+        return ResponseEntity.ok(new ServerReponse("Mot du chef de departement ajoute",true));
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> updateMotChef(String motChef) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> deleteMotChef(Integer id) {
+        this.motChefDepartementRepository.deleteById(id);
+        return ResponseEntity.ok(new ServerReponse("Mot supprime", true));
+    }
+
+    @Override
+    public ResponseEntity<MotChefDepartement> findMotByDepartement(Integer id) {
+        return ResponseEntity.ok(this.motChefDepartementRepository.findByDepartement(
+                this.departementRepository.findById(id).orElse(null)
+        ).orElse(null));
+    }
+
+    @Override
+    public ResponseEntity<List<SecteurActivite>> findAllSecteurActivite(Integer id) {
+        return ResponseEntity.ok(
+                this.secteurActiviteRepository.findByDepartement(
+                        this.departementRepository.findById(id).orElse(null)
+                )
+        );
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> createSecteurActivite(String secteur) {
+        SecteurActiviteDTO secteurActiviteDTO = new ObjectMapper().readValue(secteur,SecteurActiviteDTO.class);
+
+        SecteurActivite secteurActivite = new SecteurActivite();
+
+        secteurActivite.setDepartement(this.departementRepository.findById(secteurActiviteDTO.getDepartement()).orElse(null));
+        secteurActivite.setIntitule(secteurActiviteDTO.getIntitule());
+
+        this.secteurActiviteRepository.save(secteurActivite);
+
+        return ResponseEntity.ok(new ServerReponse("CREATION Secteur Acrtivite : SUCCESS", true));
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> updateSecteurActivite(String secteur) {
+        SecteurActiviteDTO secteurActiviteDTO = new ObjectMapper().readValue(secteur,SecteurActiviteDTO.class);
+        SecteurActivite secteurActiviteUpdate = this.secteurActiviteRepository.findById(secteurActiviteDTO.getDepartement()).orElse(null);
+
+        if (Objects.nonNull(secteurActiviteUpdate)){
+            SecteurActivite secteurActivite = new SecteurActivite();
+
+            secteurActivite.setId(secteurActiviteUpdate.getId());
+            secteurActivite.setDepartement(this.departementRepository.findById(secteurActiviteDTO.getDepartement()).orElse(null));
+            secteurActivite.setIntitule(secteurActiviteDTO.getIntitule());
+
+            this.secteurActiviteRepository.save(secteurActivite);
+
+            return ResponseEntity.ok(new ServerReponse("UPDATE Secteur Acrtivite : SUCCESS", true));
+
+        }else{
+            return ResponseEntity.ok(new ServerReponse("UPDATE Secteur Acrtivite : FAILED", true));
+        }
+
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> deleteSecteurActivite(Integer id) {
+        this.secteurActiviteRepository.deleteById(id);
+        return ResponseEntity.ok(new ServerReponse("DELETE Secteur Acrtivite : FAILED", true));
     }
 }

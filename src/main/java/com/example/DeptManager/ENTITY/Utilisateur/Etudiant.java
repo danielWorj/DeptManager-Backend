@@ -1,5 +1,6 @@
 package com.example.DeptManager.ENTITY.Utilisateur;
 
+import com.example.DeptManager.ENTITY.Scolarite.AnneeAcademique;
 import com.example.DeptManager.ENTITY.Structure.Departement;
 import com.example.DeptManager.ENTITY.Structure.Filiere;
 import com.example.DeptManager.ENTITY.Structure.Niveau;
@@ -18,4 +19,7 @@ public class Etudiant extends Utilisateur{
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Niveau niveau ;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+    private AnneeAcademique anneeAcademique ;
 }

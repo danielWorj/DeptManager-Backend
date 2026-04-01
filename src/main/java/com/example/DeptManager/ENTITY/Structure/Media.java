@@ -12,6 +12,7 @@ public class Media {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id ;
     private String url ;
+    private Boolean profil ;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Departement departement ;

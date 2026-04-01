@@ -4,6 +4,7 @@ import com.example.DeptManager.ENTITY.Scolarite.AnneeAcademique;
 import com.example.DeptManager.ENTITY.Scolarite.Documentation.TypeDocument;
 import com.example.DeptManager.ENTITY.Server.ServerReponse;
 import com.example.DeptManager.ENTITY.Structure.*;
+import com.example.DeptManager.ENTITY.Utilisateur.ChefDepartement;
 import com.example.DeptManager.ENTITY.Utilisateur.Poste;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,8 @@ public interface StructureControllerInt {
     //Departement
     @GetMapping("/departement/all")
     ResponseEntity<List<Departement>> findAllDepartement();
+    @GetMapping("/departement/byId/{id}")
+    ResponseEntity<Departement> findDepartementById(@PathVariable Integer id);
     @PostMapping("/departement/create")
     ResponseEntity<ServerReponse> createDepartement(@RequestParam("departement") String departement);
     @PostMapping("/departement/update")
@@ -34,6 +37,8 @@ public interface StructureControllerInt {
     ResponseEntity<ServerReponse> createFiliere(@RequestParam("filiere") String filiere);
     @PostMapping("/filiere/update")
     ResponseEntity<ServerReponse> updateFiliere(@RequestParam("filiere") String filiere);
+    @GetMapping("/filiere/byId/{id}")
+    ResponseEntity<Filiere> getFiliereById(@PathVariable Integer id);
     @GetMapping("/filiere/delete/{id}")
     ResponseEntity<ServerReponse> deleteFiliere(@PathVariable Integer id);
 
@@ -70,12 +75,11 @@ public interface StructureControllerInt {
     @GetMapping("/typedocument/all")
     ResponseEntity<List<TypeDocument>> findAllTypeDocument();
 
-
-
     //Debouche
-
     @GetMapping("/debouche/byfiliere/{id}")
     ResponseEntity<List<Debouche>> findAllDeboucheByFiliere(@PathVariable Integer id);
+    @GetMapping("/debouche/bydepartement/{id}")
+    ResponseEntity<List<Debouche>> findAllDeboucheByDepartement(@PathVariable Integer id);
     @PostMapping("/debouche/create")
     ResponseEntity<ServerReponse> createDebouche(@RequestParam("debouche") String debouche);
     @PostMapping("/debouche/update")
@@ -91,7 +95,8 @@ public interface StructureControllerInt {
     ResponseEntity<List<Media>> findAllMediaByDepartement(@PathVariable Integer id);
     @GetMapping("/media/delete/{id}")
     ResponseEntity<ServerReponse> deleteMedia(@PathVariable Integer id);
-
+    @PostMapping("/media/charger-image-dept")
+    ResponseEntity<ServerReponse> chargerPhotoProfil(@RequestParam("file") MultipartFile file, @RequestParam("media") String media) throws IOException;
     //Requete
     @GetMapping("/requete/all")
     ResponseEntity<List<Requete>> findAllRequete();
@@ -114,5 +119,25 @@ public interface StructureControllerInt {
     ResponseEntity<List<PieceJointeRequete>> findAllPieceByRequete(@PathVariable Integer id);
     @PostMapping("/requete/piecejointe/create")
     ResponseEntity<ServerReponse> createPieceJointeRequete(@RequestParam("piece") String piece , @RequestParam("file") MultipartFile file) throws IOException;
+
+    //Mot chef de departement
+    @PostMapping("/motchef/create")
+    ResponseEntity<ServerReponse> createMotChef(@RequestParam("mot") String motChef);
+    @PostMapping("/motchef/update")
+    ResponseEntity<ServerReponse> updateMotChef(@RequestParam("mot") String motChef);
+    @GetMapping("/motchef/delete/{id}")
+    ResponseEntity<ServerReponse> deleteMotChef(@PathVariable Integer id);
+    @GetMapping("/motchef/findby/dept/{id}")
+    ResponseEntity<MotChefDepartement> findMotByDepartement(@PathVariable Integer id);
+
+    //SECTEUR D'ACTIVITE
+    @GetMapping("/secteuractivite/allbydept/{id}")
+    ResponseEntity<List<SecteurActivite>> findAllSecteurActivite(@PathVariable Integer id);
+    @PostMapping("/secteuractivite/create")
+    ResponseEntity<ServerReponse> createSecteurActivite(@RequestParam("secteur") String secteur);
+    @PostMapping("/secteuractivite/update")
+    ResponseEntity<ServerReponse> updateSecteurActivite(@RequestParam("secteur") String secteur);
+    @GetMapping("/secteuractivite/delete/{id}")
+    ResponseEntity<ServerReponse> deleteSecteurActivite(@PathVariable Integer id);
 
 }
