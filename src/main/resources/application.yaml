@@ -1,12 +1,11 @@
 
 #Pour la production
-
 spring:
   application:
     name: DeptManager
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${JDBC_DATASOURCE_PASSWORD}
+    url: ${JDBC_DATASOURCE_URL}
     username: ${JDBC_DATASOURCE_USERNAME}
     password: ${JDBC_DATASOURCE_PASSWORD}
   jpa:
@@ -18,3 +17,5 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
+
+

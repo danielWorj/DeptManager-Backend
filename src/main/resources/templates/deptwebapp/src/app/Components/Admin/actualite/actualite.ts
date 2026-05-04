@@ -170,7 +170,7 @@ export class ActualiteE {
   toggleVedette(a: Actualite): void {
     const updated: Actualite = { ...a, vedette: !a.vedette };
 
-    this.configService.updateActualite(this.toFormData(updated)).subscribe({
+    this.configService.changeActualiteStatus(a.id).subscribe({
       next: (data: ResponseServer) => {
         if (data.status) {
           // Mise à jour locale de la liste
