@@ -44,6 +44,19 @@ public class ActualiteControllerImpl implements  ActualiteControllerInt{
     }
 
     @Override
+    public ResponseEntity<ServerReponse> changeVedetteState(Integer id) {
+        Actualite actualite = this.actualiteRepository.findById(id).orElse(null);
+
+        if (actualite.getVedette()){
+            actualite.setVedette(false);
+        }else {
+            actualite.setVedette(true);
+        }
+
+        return ResponseEntity.ok(new ServerReponse("Le statut de l'annonce a bien ete modifie", true));
+    }
+
+    @Override
     public ResponseEntity<ServerReponse> createActualite(String actualite, MultipartFile file) throws IOException {
         ActualiteDTO actualiteDTO = new ObjectMapper().readValue(actualite, ActualiteDTO.class);
 
@@ -52,6 +65,7 @@ public class ActualiteControllerImpl implements  ActualiteControllerInt{
         actualiteDB.setTitre(actualiteDTO.getTitre());
         actualiteDB.setDescription(actualiteDTO.getDescription());
         actualiteDB.setDatePublication(LocalDate.now());
+        actualiteDB.setVedette(false);
         actualiteDB.setCategorieActualite(
                 this.categorieActualiteRepository.findById(actualiteDTO.getCategorieActualite()).orElse(null)
         );

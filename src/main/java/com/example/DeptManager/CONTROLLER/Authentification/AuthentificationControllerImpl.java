@@ -21,6 +21,8 @@ public class AuthentificationControllerImpl implements AuthentificationControlle
 
         Utilisateur utilisateur = this.utilisateurRepository.findByEmailAndPassword(basicAuthDTO.getEmail(), basicAuthDTO.getPassword()).orElse(null);
 
+        System.out.println("Le nom de l'utilisateur est : " + utilisateur.getNom());
+
         return ResponseEntity.ok(new BasicAuthData(utilisateur.getId(), utilisateur.getRole()));
     }
 }

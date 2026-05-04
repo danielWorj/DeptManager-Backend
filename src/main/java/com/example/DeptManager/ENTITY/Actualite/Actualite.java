@@ -15,6 +15,7 @@ public class Actualite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String titre ;
+    private Boolean vedette ; //Il s'agit de l'info en vedette
     @Lob
     private String description ;
     private String url ;

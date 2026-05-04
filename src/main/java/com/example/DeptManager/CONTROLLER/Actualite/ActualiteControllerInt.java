@@ -17,6 +17,8 @@ public interface ActualiteControllerInt {
     ResponseEntity<List<Actualite>> getAllActualite();
     @GetMapping("/last03")
     ResponseEntity<List<Actualite>> getLast03Actualite();
+    @GetMapping("/vedette/{id}")
+    ResponseEntity<ServerReponse> changeVedetteState(@PathVariable Integer id);
     @PostMapping("create")
     ResponseEntity<ServerReponse> createActualite(@RequestParam("actualite") String actualite, @RequestParam("file")MultipartFile file) throws IOException;
     @PostMapping("update")

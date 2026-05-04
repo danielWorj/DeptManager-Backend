@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/auth")
+@RequestMapping("/deptmanager/api/auth")
 @CrossOrigin("*")
 public interface AuthentificationControllerInt {
     @PostMapping("/login")

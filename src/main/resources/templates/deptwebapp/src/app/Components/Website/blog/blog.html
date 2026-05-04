@@ -1,0 +1,233 @@
+<!-- ═══════════ HERO ═══════════ -->
+<section class="blog-hero">
+  <div class="blog-hero__pattern"></div>
+  <div class="enset-container">
+    <div class="blog-hero__inner">
+
+      <!-- Gauche -->
+      <div class="blog-hero__left">
+        <div class="anim-1">
+          <span class="enset-tag enset-tag--light">Actualités & Blog</span>
+        </div>
+        <h1 class="blog-hero__title anim-2">
+          La vie de <em>l'ENSET</em><br>en temps réel
+        </h1>
+        <p class="blog-hero__desc anim-3">
+          Concours, recherches, événements, vie étudiante — suivez toute l'actualité de l'École Nationale Supérieure d'Enseignement Technique de Douala.
+        </p>
+        <div class="blog-hero__search anim-4">
+          <input type="text" placeholder="Rechercher un article, un sujet…">
+          <button>🔍</button>
+        </div>
+      </div>
+
+      <!-- Droite : article à la une -->
+      @if (actualiteVedette()) {
+        <div class="blog-hero__featured anim-4">
+          <div class="blog-hero__featured-thumb">
+            <div class="blog-hero__featured-thumb-pattern"></div>
+            <div class="blog-hero__featured-year">2026</div>
+            <div class="blog-hero__featured-thumb-label">À la une</div>
+          </div>
+          <div class="blog-hero__featured-body">
+            <div class="blog-hero__featured-meta">
+              <span class="blog-hero__featured-cat">{{ actualiteVedette()!.categorieActualite.intitule }}</span>
+              <span class="blog-hero__featured-date">{{ actualiteVedette()!.datePublication  }}</span>
+            </div>
+            <h2 class="blog-hero__featured-title">
+              {{ actualiteVedette()!.titre }}
+            </h2>
+            <p class="blog-hero__featured-excerpt">
+              {{ actualiteVedette()!.description }}
+            </p>
+            <div class="blog-hero__featured-footer">
+              <div class="blog-hero__featured-author">
+                <div class="blog-hero__featured-avatar">ENSET DLA</div>
+                <div>
+                  <div class="blog-hero__featured-author-name">Scolarite</div>
+                  <div class="blog-hero__featured-author-role">Administration</div>
+                </div>
+              </div>
+              <a href="#" class="blog-hero__featured-read">Lire l'article →</a>
+            </div>
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FILTRES ═══════════ -->
+<div class="blog-filters">
+  <div class="enset-container">
+    <div class="blog-filters__inner">
+      <div class="blog-filters__tabs">
+        <button class="blog-filter-tab active">
+          Tout <span class="tab-count">{{ actualites().length }}</span>
+        </button>
+      </div>
+      <div class="blog-filters__right">
+        <select class="blog-sort-select">
+          <option>Plus récents</option>
+          <option>Plus lus</option>
+          <option>Alphabétique</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ GRILLE + SIDEBAR ═══════════ -->
+<section class="blog-main">
+  <div class="enset-container">
+    <div class="blog-main__grid">
+
+      <!-- Articles -->
+      <div class="blog-articles">
+        <div class="blog-section-head">
+          <h2>Derniers articles</h2>
+          <span>{{ actualites().length }} publications</span>
+        </div>
+
+        <div class="blog-grid">
+
+          @for (actu of actualites(); track actu.id) {
+            <article class="blog-card">
+              <div class="blog-card__thumb">
+                <div class="blog-card__thumb-bg">
+                  <div class="blog-card__thumb-pattern"></div>
+                  <div class="blog-card__thumb-icon">📄</div>
+                </div>
+                <span class="blog-card__cat-badge">{{ actu.categorieActualite.intitule }}</span>
+              </div>
+              <div class="blog-card__body">
+                <div class="blog-card__meta">
+                  <span class="blog-card__cat">{{ actu.categorieActualite.intitule }}</span>
+                  <span class="blog-card__sep"></span>
+                  <span class="blog-card__date">{{ actu.datePublication }}</span>
+                </div>
+                <h3 class="blog-card__title">{{ actu.titre }}</h3>
+                <p class="blog-card__excerpt">{{ actu.description }}</p>
+                <div class="blog-card__footer">
+                  <a href="#" class="blog-card__read">Lire la suite →</a>
+                </div>
+              </div>
+            </article>
+          } @empty {
+            <p>Aucun article disponible.</p>
+          }
+
+        </div><!-- /blog-grid -->
+
+        <!-- Pagination -->
+        <div class="blog-pagination">
+          <button class="blog-page-btn blog-page-btn--nav">← Précédent</button>
+          <button class="blog-page-btn active">1</button>
+          <button class="blog-page-btn blog-page-btn--nav">Suivant →</button>
+        </div>
+      </div><!-- /blog-articles -->
+
+      <!-- Sidebar -->
+      <aside class="blog-sidebar">
+
+        <!-- CTA admission -->
+        <div class="sidebar-cta">
+          <div class="sidebar-cta__icon">🎓</div>
+          <h3>Pré-inscriptions ouvertes</h3>
+          <p>Année académique 2025–2026 · BTS · Licence Pro · Master</p>
+          <a href="#">Soumettre mon dossier →</a>
+        </div>
+
+        <!-- Articles récents -->
+        <div class="blog-sidebar-widget">
+          <div class="blog-sidebar-widget__head"><h3>Articles récents</h3></div>
+          <div class="blog-sidebar-widget__body">
+            <ul class="sidebar-recent">
+              @for (actu of actualites(); track actu.id) {
+                <li class="sidebar-recent-item">
+                  <div class="sidebar-recent-thumb" style="border-radius:6px;">📄</div>
+                  <div>
+                    <div class="sidebar-recent-item__title">{{ actu.titre }}</div>
+                    <div class="sidebar-recent-item__date">{{ actu.datePublication   }}</div>
+                  </div>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="blog-newsletter">
+          <div class="blog-newsletter__inner">
+            <span class="enset-tag enset-tag--light">Newsletter</span>
+            <h3>Restez informé</h3>
+            <p>Recevez les actualités, résultats de concours et événements du campus directement dans votre boîte mail.</p>
+            <div class="blog-newsletter__form">
+              <input type="email" class="blog-newsletter__input" placeholder="Votre adresse email">
+              <button class="blog-newsletter__btn">S'abonner →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="blog-sidebar-widget">
+          <div class="blog-sidebar-widget__head"><h3>Mots-clés</h3></div>
+          <div class="blog-sidebar-widget__body">
+            <div class="sidebar-tags">
+              <span class="sidebar-tag">Concours 2026</span>
+              <span class="sidebar-tag">BTS</span>
+              <span class="sidebar-tag">Licence Pro</span>
+              <span class="sidebar-tag">Master</span>
+              <span class="sidebar-tag">Génie forestier</span>
+              <span class="sidebar-tag">ITH</span>
+              <span class="sidebar-tag">ESF</span>
+              <span class="sidebar-tag">ESB</span>
+              <span class="sidebar-tag">Admissions</span>
+              <span class="sidebar-tag">LMD</span>
+              <span class="sidebar-tag">Stages</span>
+              <span class="sidebar-tag">Recherche</span>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ RUBRIQUES THÉMATIQUES ═══════════ -->
+<section class="blog-topics">
+  <div class="enset-container">
+    <div class="blog-topics__head">
+      <span class="enset-tag">Explorer par thème</span>
+      <h2>Toutes nos rubriques</h2>
+    </div>
+    <div class="blog-topics__grid">
+      <div class="blog-topic-card">
+        <div class="blog-topic-card__num">01</div>
+        <div class="blog-topic-card__icon">🎓</div>
+        <div class="blog-topic-card__name">Concours & Admissions</div>
+        <div class="blog-topic-card__count">Mis à jour régulièrement</div>
+      </div>
+      <div class="blog-topic-card">
+        <div class="blog-topic-card__num">02</div>
+        <div class="blog-topic-card__icon">🎒</div>
+        <div class="blog-topic-card__name">Vie étudiante</div>
+        <div class="blog-topic-card__count">Événements & campus</div>
+      </div>
+      <div class="blog-topic-card">
+        <div class="blog-topic-card__num">03</div>
+        <div class="blog-topic-card__icon">🔬</div>
+        <div class="blog-topic-card__name">Recherche & Innovation</div>
+        <div class="blog-topic-card__count">Laboratoires & projets</div>
+      </div>
+      <div class="blog-topic-card">
+        <div class="blog-topic-card__num">04</div>
+        <div class="blog-topic-card__icon">🏛️</div>
+        <div class="blog-topic-card__name">Départements</div>
+        <div class="blog-topic-card__count">ESB · ITH · GFO · ESF</div>
+      </div>
+    </div>
+  </div>
+</section>

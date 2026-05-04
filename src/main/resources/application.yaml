@@ -6,7 +6,7 @@ spring:
     name: DeptManager
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${JDBC_DATASOURCE_URL}
+    url: ${JDBC_DATASOURCE_PASSWORD}
     username: ${JDBC_DATASOURCE_USERNAME}
     password: ${JDBC_DATASOURCE_PASSWORD}
   jpa:

@@ -9,6 +9,12 @@ import { BasicAuthData } from '../../Model/Utilisateur/BasicAuthData';
 })
 export class AuthService {
   constructor(private http:HttpClient){}
+    isAuthenticated(): boolean {
+    if (typeof window === 'undefined') return false; // SSR guard
+    return !!localStorage.getItem('id');
+  }
+
+  
   basicLogin(request :any):Observable<BasicAuthData>{
     return this.http.post<BasicAuthData>(DeptManager.Auth.baslogin, request)
   }

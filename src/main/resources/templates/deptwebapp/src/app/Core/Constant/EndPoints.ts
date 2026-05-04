@@ -1,4 +1,6 @@
-const api = "http://localhost:8080/deptmanager/api"; 
+const api = "https://deptmanager-backend.onrender.com/deptmanager/api"; 
+
+//const api = "http://localhost:8080/deptmanager/api";
 
 const authapi = `${api}/auth`; 
 const actualiteapi = `${api}/actualite`; 
@@ -9,7 +11,6 @@ const utilisateurapi = `${api}/utilisateur`;
 const evaluationapi = `${api}/note`; 
 
 const ai = "http://localhost:5000/api/";
-
 
 
 export const DeptManager ={
@@ -214,6 +215,7 @@ export const DeptManager ={
         create : `${actualiteapi}/create`, 
         update : `${actualiteapi}/update`, 
         delete : `${actualiteapi}/delete/`, 
+        vedette : `${actualiteapi}/vedette/`, 
         
         CategorieActualite:{
             all : `${actualiteapi}/categorie/all`, 
