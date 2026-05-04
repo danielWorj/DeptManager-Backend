@@ -9,7 +9,6 @@ spring:
     url: ${JDBC_DATASOURCE_URL}
     username: ${JDBC_DATASOURCE_USERNAME}
     password: ${JDBC_DATASOURCE_PASSWORD}
-
   jpa:
     show-sql: true
     hibernate:
