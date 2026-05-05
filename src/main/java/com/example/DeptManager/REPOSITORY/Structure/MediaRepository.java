@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface MediaRepository extends JpaRepository<Media,Integer>{
     List<Media> findByDepartement(Departement departement);
+    Media findByDepartementAndProfil(Departement departement, Boolean profil);
 }

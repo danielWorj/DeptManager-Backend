@@ -17,5 +17,7 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
-
-
+cloudinary:
+  cloud-name: ${CLOUDINARY_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}

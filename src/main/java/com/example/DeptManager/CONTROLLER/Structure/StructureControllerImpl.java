@@ -11,6 +11,7 @@ import com.example.DeptManager.REPOSITORY.Scolarite.AnneeAcademiqueRepository;
 import com.example.DeptManager.REPOSITORY.Scolarite.TypeDocumentRepository;
 import com.example.DeptManager.REPOSITORY.Structure.*;
 import com.example.DeptManager.REPOSITORY.Utilisateur.EtudiantRepository;
+import com.example.DeptManager.SERVICE.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Controller
@@ -64,6 +66,10 @@ public class StructureControllerImpl implements StructureControllerInt{
     private MotChefDepartementRepository motChefDepartementRepository;
     @Autowired
     private SecteurActiviteRepository secteurActiviteRepository;
+
+    //Cloudinary
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     private static String folderFile = System.getProperty("user.dir")+"/src/main/resources/templates/deptwebapp/public/assets/file"; //chemin a déinir
 
@@ -319,19 +325,28 @@ public class StructureControllerImpl implements StructureControllerInt{
         mediaDB.setDepartement(this.departementRepository.findById(mediaDTO.getDepartement()).orElse(null));
         mediaDB.setProfil(false);
         String fileName ;
+        //APPROCHE DE SAUVERGARDE NE LOCAL
+//        if (!fichier.isEmpty()){
+//            //S'il n'y a pas de fichier
+//            fileName = fichier.getOriginalFilename(); // le fichier prend le nom du client
+//
+//            mediaDB.setUrl(fileName);
+//
+//            System.out.println("le nom du fichier "+ fileName);
+//
+//            Path path = Paths.get(folderFile,fileName);
+//
+//            fichier.transferTo(path);
+//
+//            System.out.println("media enregistre en base de donnee");
+//        }
+
+        //APPROCHE DE SAUVEGARDE SUR CLOUDINARY
         if (!fichier.isEmpty()){
-            //S'il n'y a pas de fichier
-            fileName = fichier.getOriginalFilename(); // le fichier prend le nom du client
+            Map result = this.cloudinaryService.upload(fichier);
+            mediaDB.setUrl(result.get("secure_url").toString());
+            System.out.println("media enregistre sur cloudinary avec url: "+ result.get("secure_url").toString());
 
-            mediaDB.setUrl(fileName);
-
-            System.out.println("le nom du fichier "+ fileName);
-
-            Path path = Paths.get(folderFile,fileName);
-
-            fichier.transferTo(path);
-
-            System.out.println("media enregistre en base de donnee");
         }
 
         this.mediaRepository.save(mediaDB);
@@ -360,24 +375,25 @@ public class StructureControllerImpl implements StructureControllerInt{
 
         Media mediaDB =new Media();
 
-        mediaDB.setProfil(true);
-        mediaDB.setDepartement(this.departementRepository.findById(mediaDTO.getDepartement()).orElse(null));
+        Departement departement = this.departementRepository.findById(mediaDTO.getDepartement()).orElse(null);
 
-        String fileName;
-        if (!media.isEmpty()){
-            //S'il n'y a pas de fichier
-            fileName = file.getOriginalFilename(); // le fichier prend le nom du client
+        //Recherche d'abord s'il y'a deja un media de profil
+        Media actualProfilMedia = this.mediaRepository.findByDepartementAndProfil(departement,true);
 
-            mediaDB.setUrl(fileName);
-
-            System.out.println("le nom du fichier "+ fileName);
-
-            Path path = Paths.get(folderFile,fileName);
-
-            file.transferTo(path);
-
-            System.out.println("media enregistre en base de donnee");
+        if (Objects.nonNull(actualProfilMedia)){
+            actualProfilMedia.setProfil(false);
         }
+
+        //APPROCHE PRODUCTION
+        if (!media.isEmpty()){
+            Map result = this.cloudinaryService.upload(file);
+            mediaDB.setUrl(result.get("secure_url").toString());
+            System.out.println("media enregistre sur cloudinary avec url: "+ result.get("secure_url").toString());
+        }
+
+        mediaDB.setProfil(true);
+        mediaDB.setDepartement(departement);
+
         this.mediaRepository.save(mediaDB);
         return ResponseEntity.ok(new ServerReponse("Image de profil ajoutee", true));
     }
