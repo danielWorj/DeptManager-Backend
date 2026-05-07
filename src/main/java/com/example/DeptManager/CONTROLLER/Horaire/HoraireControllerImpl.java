@@ -69,6 +69,13 @@ public class HoraireControllerImpl implements HoraireControllerInt {
     }
 
     @Override
+    public ResponseEntity<List<Horaire>> getAllHoraire() {
+        return ResponseEntity.ok(
+                this.horaireRepository.findAll()
+        );
+    }
+
+    @Override
     public ResponseEntity<ServerReponse> creationHoraire(String horaire) {
         HoraireDTO horaireDTO = new ObjectMapper().readValue(horaire, HoraireDTO.class);
 

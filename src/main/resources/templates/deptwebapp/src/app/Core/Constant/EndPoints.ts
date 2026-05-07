@@ -1,6 +1,6 @@
-//const api = "https://deptmanager-backend.onrender.com/deptmanager/api"; 
+const api = "https://deptmanager-backend.onrender.com/deptmanager/api"; 
 
-const api = "http://localhost:8080/deptmanager/api";
+//const api = "http://localhost:8080/deptmanager/api";
 
 const authapi = `${api}/auth`; 
 const actualiteapi = `${api}/actualite`; 
@@ -112,6 +112,7 @@ export const DeptManager ={
 
         }, 
         Repartition:{
+            all : `${scolariteapi}/repartition/all`, 
             create : `${scolariteapi}/repartition/create`, 
             update : `${scolariteapi}/repartition/update`, 
             delete : `${scolariteapi}/repartition/delete/`, 
@@ -134,6 +135,7 @@ export const DeptManager ={
         
     }, 
     Horaire:{
+        all : `${horaireapi}/all`, 
         create : `${horaireapi}/create`, 
         update : `${horaireapi}/update`, 
         allByFiliereAndNiveau : `${horaireapi}/all/byfiliere/andniveau/`, 
@@ -162,6 +164,7 @@ export const DeptManager ={
             count : `${utilisateurapi}/enseignant/count`, 
             create : `${utilisateurapi}/enseignant/create`, 
             update : `${utilisateurapi}/enseignant/update`, 
+            delete : `${utilisateurapi}/enseignant/delete`, 
             byId : `${utilisateurapi}/enseignant/byId/`,  
             allbydepartement : `${utilisateurapi}/enseignant/bydepartement/`, 
             countByDepaterment : `${utilisateurapi}/enseignant/countbydept/`,
@@ -172,6 +175,7 @@ export const DeptManager ={
             count : `${utilisateurapi}/etudiant/count`,
             create : `${utilisateurapi}/etudiant/create`, 
             update : `${utilisateurapi}/etudiant/update`,  
+            delete : `${utilisateurapi}/etudiant/delete`,  
             byId : `${utilisateurapi}/etudiant/byid/`,  
             allbydepartement : `${utilisateurapi}/etudiant/bydepartement/`, 
             countByDepaterment : `${utilisateurapi}/etudiant/countbydept/`, 

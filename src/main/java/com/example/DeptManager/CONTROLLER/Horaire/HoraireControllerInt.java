@@ -21,6 +21,8 @@ public interface HoraireControllerInt {
     @GetMapping("/periode/all")
     ResponseEntity<List<Periode>> getAllPeriode();
     //Horaire
+    @GetMapping("/all")
+    ResponseEntity<List<Horaire>> getAllHoraire();
     @PostMapping("/create")
     ResponseEntity<ServerReponse> creationHoraire(@RequestParam("horaire") String horaire);
     @PostMapping("/update")

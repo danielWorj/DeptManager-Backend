@@ -107,12 +107,20 @@ export const routes: Routes = [
                     loadComponent: ()=>import('./Components/Website/page-filiere/page-filiere').then(f=>f.PageFiliere)
                 },
                 {
-                    path : 'recherche', 
+                    path : 'llm', 
                     loadComponent: ()=>import('./Components/Website/page-llm/page-llm').then(r=>r.PageLlm)
                 },
                 {
                     path : 'pole-formation', 
                     loadComponent: ()=>import('./Components/Website/pole-formation/pole-formation').then(r=>r.PoleFormation)
+                },
+                {
+                    path : 'documentation', 
+                    loadComponent: ()=>import('./Components/Website/documentation/documentation').then(r=>r.DocumentationC)
+                },
+                {
+                    path : 'portail-requete', 
+                    loadComponent: ()=>import('./Components/Website/portail-requete/portail-requete').then(r=>r.PortailRequete)
                 },
                 // {
                 //     path : 'departements/:id', 

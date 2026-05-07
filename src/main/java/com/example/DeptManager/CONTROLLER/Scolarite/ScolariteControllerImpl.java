@@ -304,6 +304,11 @@ public class ScolariteControllerImpl implements ScolariteControllerInt {
     }
 
     @Override
+    public ResponseEntity<List<Repartition>> getAllRepartition() {
+        return ResponseEntity.ok(this.repartitionRepository.findAll(Sort.by(Sort.Direction.DESC,"id")));
+    }
+
+    @Override
     public ResponseEntity<ServerReponse> createRepartition(String repartition) {
         RepartitionDTO repartitionDTO = new ObjectMapper().readValue(repartition,RepartitionDTO.class);
         Repartition repartitionDB = new Repartition();

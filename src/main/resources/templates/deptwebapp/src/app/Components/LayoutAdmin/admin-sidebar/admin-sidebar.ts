@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, Output, EventEmitter, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({
@@ -8,10 +8,18 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
   styleUrl: './admin-sidebar.css',
 })
 export class AdminSidebar {
-   role= signal<number>(0);
-    constructor(){
-      //this.role.set(parseInt(sessionStorage.getItem('role')!)??0); 
-      this.role.set(0); 
-    }
 
+  @Output() closeSidebar = new EventEmitter<void>();
+
+  role = signal<number>(0);
+  activeItem = signal<string>('');
+
+  constructor() {
+    // this.role.set(parseInt(sessionStorage.getItem('role')!) ?? 0);
+    this.role.set(0);
+  }
+
+  setActive(item: string) {
+    this.activeItem.set(item);
+  }
 }

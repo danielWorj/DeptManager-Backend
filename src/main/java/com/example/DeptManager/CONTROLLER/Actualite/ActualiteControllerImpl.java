@@ -6,6 +6,7 @@ import com.example.DeptManager.ENTITY.Actualite.CategorieActualite;
 import com.example.DeptManager.ENTITY.Server.ServerReponse;
 import com.example.DeptManager.REPOSITORY.Actualite.ActualiteRepository;
 import com.example.DeptManager.REPOSITORY.Actualite.CategorieActualiteRepository;
+import com.example.DeptManager.SERVICE.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Controller
@@ -25,6 +27,8 @@ public class ActualiteControllerImpl implements  ActualiteControllerInt{
     private ActualiteRepository actualiteRepository;
     @Autowired
     private CategorieActualiteRepository categorieActualiteRepository;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     private static String folderFile = System.getProperty("user.dir")+"/src/main/resources/templates/deptwebapp/public/assets/file"; //chemin a déinir
 
@@ -71,20 +75,15 @@ public class ActualiteControllerImpl implements  ActualiteControllerInt{
         );
 
         String fileName ;
+
+        //APPROCHE DE SAUVEGARDE SUR CLOUDINARY
         if (!file.isEmpty()){
-            //S'il n'y a pas de fichier
-            fileName = file.getOriginalFilename(); // le fichier prend le nom du client
+            Map result = this.cloudinaryService.upload(file);
+            actualiteDB.setUrl(result.get("secure_url").toString());
+            System.out.println("media enregistre sur cloudinary avec url: "+ result.get("secure_url").toString());
 
-            actualiteDB.setUrl(fileName);
-
-            System.out.println("le nom du fichier "+ fileName);
-
-            Path path = Paths.get(folderFile,fileName);
-
-            file.transferTo(path);
-
-            System.out.println("media enregistre en base de donnee");
         }
+
 
         this.actualiteRepository.save(actualiteDB);
         return ResponseEntity.ok(new ServerReponse("Actualite cree avec success", true));

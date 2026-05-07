@@ -56,6 +56,8 @@ public interface ScolariteControllerInt {
 
 
     //Repartition
+    @GetMapping("/repartition/all")
+    ResponseEntity<List<Repartition>> getAllRepartition();
     @PostMapping("/repartition/create")
     ResponseEntity<ServerReponse> createRepartition(@RequestParam("repartition") String repartition) ;
     @PostMapping("/repartition/update")
