@@ -3,6 +3,7 @@ package com.example.DeptManager.CONTROLLER.Note;
 import com.example.DeptManager.ENTITY.Evaluation.Note;
 import com.example.DeptManager.ENTITY.Evaluation.TypeEvaluation;
 import com.example.DeptManager.ENTITY.Server.ServerReponse;
+import com.example.DeptManager.ENTITY.Utilisateur.Etudiant;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,12 @@ public interface NoteControllerInt {
     @GetMapping("/find/all/filiere/niveau/{idF}/{idN}")
     ResponseEntity<List<Note>> findAllNoteByFiliereAndNiveau(@PathVariable Integer idF, @PathVariable Integer idN);
 
+
+
+    //Etudiant
     @GetMapping("/find/all/etudiant/semestre/{idE}/{idS}")
     ResponseEntity<List<Note>> findAllNoteByEtudiantAndSemestre(@PathVariable Integer idE, @PathVariable Integer idS);
+
+
+
 }

@@ -100,6 +100,8 @@ public interface StructureControllerInt {
     //Requete
     @GetMapping("/requete/all")
     ResponseEntity<List<Requete>> findAllRequete();
+    @GetMapping("/requete/all/byetudiant/{id}")
+    ResponseEntity<List<Requete>> findAllRequeteByEtudiant(@PathVariable Integer id);
     @GetMapping("/requete/allbymotif/{id}")
     ResponseEntity<List<Requete>> findAllRequeteByMotif(@PathVariable Integer id);
     @PostMapping("/requete/creation")

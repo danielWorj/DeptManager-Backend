@@ -4,7 +4,7 @@
       <span class="app-brand-logo demo">
        <img src="/favicon.svg" alt="Logo" width="32" height="32">
       </span>
-      <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+      <span class="app-brand-text demo menu-text fw-bolder ms-2">DM</span>
     </a>
 
     <!-- Bouton fermer sidebar (mobile) -->
@@ -20,7 +20,7 @@
   <!-- ══════════════════════════════════════════
        ADMIN (role = 0)
   ══════════════════════════════════════════ -->
-  @if (role() === 0) {
+  @if (role() == 0) {
     <ul class="menu-inner py-1">
 
       <!-- Dashboard -->
@@ -151,7 +151,7 @@
   <!-- ══════════════════════════════════════════
        ENSEIGNANT (role = 1)
   ══════════════════════════════════════════ -->
-  @if (role() === 1) {
+  @if (role() == 1) {
     <ul class="menu-inner py-1">
 
       <li class="menu-item">
@@ -192,11 +192,11 @@
   <!-- ══════════════════════════════════════════
        ÉTUDIANT (role = 2)
   ══════════════════════════════════════════ -->
-  @if (role() === 2) {
+  @if (role() == 2) {
     <ul class="menu-inner py-1">
 
       <li class="menu-item">
-        <a routerLink="admin-dashboard"
+        <a routerLink="admin-etudiant"
            class="menu-link"
            [class.active]="activeItem() === 'dashboard'"
            (click)="setActive('dashboard')">

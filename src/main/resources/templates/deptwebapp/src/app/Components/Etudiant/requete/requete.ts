@@ -27,20 +27,23 @@ export class RequeteE {
   private utilisateurService = inject(UtilisateurService);
 
     // ─── Cycle de vie 
+    idEtudiant = signal<number>(0); 
   constructor() {
+    this.idEtudiant.set(parseInt(localStorage.getItem('id')!)??0);
+
     this.buildForm();
     this.loadPage();
   }
 
   loadPage(){
-    this.getAllRequete();
+    this.getAllRequeteByEtudiantByEtudiant();
     this.getAllMotifRequete();
     this.getAllEtudiant();
     this.countRequeteByStatut();
   }
 
   loadDataRPage(){
-    this.getAllRequete();
+    this.getAllRequeteByEtudiantByEtudiant();
     this.countRequeteByStatut();
   }
 
@@ -61,7 +64,6 @@ export class RequeteE {
 
   // ─── Formulaire ──
   requeteFb!: FormGroup;
-
   private buildForm(): void {
     this.requeteFb = this.fb.group({
       id:           new FormControl<number | null>(null),
@@ -74,8 +76,8 @@ export class RequeteE {
 
  
   // ─── API : Requêtes 
-  getAllRequete(): void {
-    this.scolariteService.getAllRequete().subscribe({
+  getAllRequeteByEtudiantByEtudiant(): void {
+    this.scolariteService.getAllRequeteByEtudiant(this.idEtudiant()).subscribe({
       next: (data: Requete[]) => {
         this.listRequeteSave.set(data);
       },
@@ -160,7 +162,7 @@ export class RequeteE {
     this.scolariteService.changeRequeteStatut(idR, idS).subscribe({
           next: (response: ResponseServer) => {
             console.log(response.message); 
-            this.getAllRequete(); 
+            this.getAllRequeteByEtudiantByEtudiant(); 
           },
           error: (err: any) => console.error('Erreur change statut :', err),
     });

@@ -404,6 +404,13 @@ public class StructureControllerImpl implements StructureControllerInt{
     }
 
     @Override
+    public ResponseEntity<List<Requete>> findAllRequeteByEtudiant(Integer id) {
+        return ResponseEntity.ok(this.requeteRepository.findByEtudiant(
+                this.etudiantRepository.findById(id).orElse(null)
+        ));
+    }
+
+    @Override
     public ResponseEntity<List<Requete>> findAllRequeteByMotif(Integer id) {
         return ResponseEntity.ok(
                 this.requeteRepository.findByMotifRequete(
