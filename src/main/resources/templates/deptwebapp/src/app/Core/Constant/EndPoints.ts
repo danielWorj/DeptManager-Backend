@@ -1,6 +1,6 @@
-//const api = "https://deptmanager-backend.onrender.com/deptmanager/api"; 
+const api = "https://deptmanager-backend.onrender.com/deptmanager/api"; 
 
-const api = "http://localhost:8080/deptmanager/api";
+//const api = "http://localhost:8080/deptmanager/api";
 
 const authapi = `${api}/auth`; 
 const actualiteapi = `${api}/actualite`; 
@@ -160,6 +160,8 @@ export const DeptManager ={
         
     },
     Utilisateur :{
+        change : `${utilisateurapi}/status/`, 
+
         Enseignant :{
             all : `${utilisateurapi}/enseignant/all`, 
             count : `${utilisateurapi}/enseignant/count`, 

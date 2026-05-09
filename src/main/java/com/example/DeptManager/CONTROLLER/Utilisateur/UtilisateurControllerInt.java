@@ -68,4 +68,8 @@ public interface UtilisateurControllerInt {
     @PostMapping("/chefdept/update")
     ResponseEntity<ServerReponse> updateChefDepartement(@RequestParam("etudiant") String chef);
 
+
+    //CHANGEMENT DU STATUS
+    @GetMapping("/status/{id}")
+    ResponseEntity<ServerReponse> changementStatus(@PathVariable Integer id);
 }

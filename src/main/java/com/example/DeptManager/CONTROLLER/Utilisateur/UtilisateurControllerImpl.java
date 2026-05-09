@@ -8,10 +8,12 @@ import com.example.DeptManager.ENTITY.Structure.Departement;
 import com.example.DeptManager.ENTITY.Utilisateur.ChefDepartement;
 import com.example.DeptManager.ENTITY.Utilisateur.Enseignant;
 import com.example.DeptManager.ENTITY.Utilisateur.Etudiant;
+import com.example.DeptManager.ENTITY.Utilisateur.Utilisateur;
 import com.example.DeptManager.REPOSITORY.Scolarite.AnneeAcademiqueRepository;
 import com.example.DeptManager.REPOSITORY.Structure.*;
 import com.example.DeptManager.REPOSITORY.Utilisateur.EnseignantRepository;
 import com.example.DeptManager.REPOSITORY.Utilisateur.EtudiantRepository;
+import com.example.DeptManager.REPOSITORY.Utilisateur.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import java.util.Objects;
 
 @Controller
 public class UtilisateurControllerImpl implements UtilisateurControllerInt{
+    @Autowired private UtilisateurRepository utilisateurRepository;
     @Autowired
     private EnseignantRepository enseignantRepository;
     @Autowired
@@ -309,6 +312,20 @@ public class UtilisateurControllerImpl implements UtilisateurControllerInt{
         this.chefDepartementRepository.save(chefDepartement);
         return ResponseEntity.ok(new ServerReponse("Mise a jour chef departement", true));
 
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> changementStatus(Integer id) {
+        Utilisateur utilisateur = this.utilisateurRepository.findById(id).orElse(null);
+
+        if (utilisateur.getStatus()){
+            utilisateur.setStatus(false);
+            this.utilisateurRepository.save(utilisateur);
+        }else{
+            utilisateur.setStatus(true);
+            this.utilisateurRepository.save(utilisateur);
+        }
+        return ResponseEntity.ok(new ServerReponse("Status mis a jour avec false", true));
     }
 
     @Override
