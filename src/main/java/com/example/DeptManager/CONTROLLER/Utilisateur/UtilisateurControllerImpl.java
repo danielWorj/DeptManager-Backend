@@ -75,6 +75,11 @@ public class UtilisateurControllerImpl implements UtilisateurControllerInt{
         );
     }
 
+    @Override
+    public ResponseEntity<ServerReponse> deleteEnseignant(Integer id) {
+        this.enseignantRepository.deleteById(id);
+        return ResponseEntity.ok(new ServerReponse("L'enseignant a bien ete supprome", true));
+    }
 
 
     @Override
@@ -98,39 +103,26 @@ public class UtilisateurControllerImpl implements UtilisateurControllerInt{
         return ResponseEntity.ok(new ServerReponse("Enseignant cree avec success", true));
     }
 
+    // modifier directement l'objet existant
     @Override
     public ResponseEntity<ServerReponse> updateEnseignant(String enseignant) {
         EnseignantDTO enseignantDTO = new ObjectMapper().readValue(enseignant, EnseignantDTO.class);
-        Enseignant enseignantDB1 = this.enseignantRepository.findById(enseignantDTO.getId()).orElse(null);
+        Enseignant enseignantDB = this.enseignantRepository.findById(enseignantDTO.getId()).orElse(null);
 
-        if (Objects.nonNull(enseignantDB1)){
-            Enseignant enseignantDB = new Enseignant();
-
+        if (Objects.nonNull(enseignantDB)) {
             enseignantDB.setDepartement(this.departementRepository.findById(enseignantDTO.getDepartement()).orElse(null));
             enseignantDB.setPoste(this.posteRepository.findById(enseignantDTO.getPoste()).orElse(null));
-
-            enseignantDB.setId(enseignantDB1.getId());
             enseignantDB.setNom(enseignantDTO.getNom());
             enseignantDB.setPrenom(enseignantDTO.getPrenom());
             enseignantDB.setTelephone(enseignantDTO.getTelephone());
             enseignantDB.setEmail(enseignantDTO.getEmail());
-            enseignantDB.setRole(1);
-            enseignantDB.setStatus(false);
-            enseignantDB.setDateCreation(LocalDate.now());
-
+            // NE PAS écraser role, status, dateCreation si tu ne veux pas les réinitialiser
             this.enseignantRepository.save(enseignantDB);
-
             return ResponseEntity.ok(new ServerReponse("Enseignant mis a jour avec success", true));
-
-        }else {
-            System.out.println("Erreur de mise a jour");
-            return ResponseEntity.ok(new ServerReponse("Erreur de mise a jour de l'enseignant", true));
-
+        } else {
+            return ResponseEntity.ok(new ServerReponse("Erreur de mise a jour de l'enseignant", false)); // ← false !
         }
-
-
     }
-
     @Override
     public ResponseEntity<List<Enseignant>> findAllEnseignantByDepartement(Integer id) {
         return ResponseEntity.ok(
@@ -159,6 +151,12 @@ public class UtilisateurControllerImpl implements UtilisateurControllerInt{
         return ResponseEntity.ok(
                 this.etudiantRepository.count()
         );
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> deleteEtudiant(Integer id) {
+        this.etudiantRepository.deleteById(id);
+        return ResponseEntity.ok(new ServerReponse("Etudiant supprime avec succes", true));
     }
 
     @Override

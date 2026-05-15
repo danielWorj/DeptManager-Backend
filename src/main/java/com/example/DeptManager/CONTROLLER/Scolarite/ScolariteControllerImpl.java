@@ -16,12 +16,14 @@ import com.example.DeptManager.REPOSITORY.Structure.DepartementRepository;
 import com.example.DeptManager.REPOSITORY.Structure.FiliereRepository;
 import com.example.DeptManager.REPOSITORY.Structure.NiveauRepository;
 import com.example.DeptManager.REPOSITORY.Utilisateur.EnseignantRepository;
+import com.example.DeptManager.SERVICE.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.ObjectMapper;
 
@@ -30,6 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Controller
@@ -54,6 +57,7 @@ public class ScolariteControllerImpl implements ScolariteControllerInt {
     private RepartitionRepository repartitionRepository;
     @Autowired
     private SemestreRepository semestreRepository;
+    @Autowired private CloudinaryService cloudinaryService;
 
 
     private static String folderFile = System.getProperty("user.dir")+"/src/main/resources/templates/deptwebapp/public/assets/file"; //chemin a déinir
@@ -211,22 +215,30 @@ public class ScolariteControllerImpl implements ScolariteControllerInt {
                 this.matiereRepository.findById(documentDTO.getMatiere()).orElse(null)
         );
 
-
-        String fileName = "";
+    //VERSION DU STOCKAGE EN LOCAL
+//        String fileName = "";
+//        if (!file.isEmpty()){
+//            //S'il n'y a pas de fichier
+//            fileName = file.getOriginalFilename(); // le fichier prend le nom du client
+//
+//            documentDB.setUrl(fileName);
+//
+//            System.out.println("le nom du fichier "+ fileName);
+//
+//            Path path = Paths.get(folderFile,fileName);
+//
+//            file.transferTo(path);
+//
+//            System.out.println("fichier enregistre en base de donnee");
+//        }
+        //APPROCHE DE SAUVEGARDE SUR CLOUDINARY
         if (!file.isEmpty()){
-            //S'il n'y a pas de fichier
-            fileName = file.getOriginalFilename(); // le fichier prend le nom du client
-
-            documentDB.setUrl(fileName);
-
-            System.out.println("le nom du fichier "+ fileName);
-
-            Path path = Paths.get(folderFile,fileName);
-
-            file.transferTo(path);
-
-            System.out.println("fichier enregistre en base de donnee");
+            Map result = this.cloudinaryService.upload(file);
+            documentDB.setUrl(result.get("secure_url").toString());
+            System.out.println("media enregistre sur cloudinary avec url: "+ result.get("secure_url").toString());
         }
+
+
 
         this.documentRepository.save(documentDB);
 
@@ -467,6 +479,49 @@ public class ScolariteControllerImpl implements ScolariteControllerInt {
         this.semestreRepository.deleteById(id);
         return ResponseEntity.ok(new ServerReponse("Semestre supprime avec success ", true));
 
+    }
+
+    @Override
+    public ResponseEntity<List<AnneeAcademique>> findAllAnneeAcademique() {
+        return ResponseEntity.ok(this.anneeAcademiqueRepository.findAll());
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> activerAnneeAcademique(Integer id) {
+        AnneeAcademique anneeAcademique = this.anneeAcademiqueRepository.findById(id).orElse(null);
+        AnneeAcademique anneeAcademiqueActif = this.anneeAcademiqueRepository.findByStatusIsTrue().orElse(null);
+
+        anneeAcademiqueActif.setStatus(false);
+
+        anneeAcademique.setStatus(true);
+
+        this.anneeAcademiqueRepository.save(anneeAcademique);
+        this.anneeAcademiqueRepository.save(anneeAcademiqueActif);
+
+        return ResponseEntity.ok(new ServerReponse("Annee academique active", true));
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> createAnneeAcademique(String annee) {
+        AnneeAcademique anneeAcademique = new ObjectMapper().readValue(annee,AnneeAcademique.class);
+       anneeAcademique.setStatus(false);
+        this.anneeAcademiqueRepository.save(anneeAcademique);
+        return ResponseEntity.ok(new ServerReponse("Nouvelle Annee academique", true));
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> updateAnneeAcademique(String annee) {
+        AnneeAcademique anneeAcademique = new ObjectMapper().readValue(annee,AnneeAcademique.class);
+        AnneeAcademique anneeAcademiqueDB = this.anneeAcademiqueRepository.findById(anneeAcademique.getId()).orElse(null);
+        anneeAcademique.setId(anneeAcademiqueDB.getId());
+        this.anneeAcademiqueRepository.save(anneeAcademique);
+        return ResponseEntity.ok(new ServerReponse("Annee academique mis a jour avec success", true));
+    }
+
+    @Override
+    public ResponseEntity<ServerReponse> deleteAnneeAcademique(Integer id) {
+        this.anneeAcademiqueRepository.deleteById(id);
+        return ResponseEntity.ok(new ServerReponse("Annee academique supprime avec succes", true));
     }
 
 

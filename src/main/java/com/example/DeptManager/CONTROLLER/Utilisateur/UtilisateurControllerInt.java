@@ -23,6 +23,8 @@ public interface UtilisateurControllerInt {
     ResponseEntity<Long> countAllEnseignant();
     @GetMapping("/enseignant/countbydept/{id}")
     ResponseEntity<Integer> countAllEnseignantByDepartement(@PathVariable Integer id);
+    @GetMapping("/enseignant/delete/{id}")
+    ResponseEntity<ServerReponse> deleteEnseignant(@PathVariable Integer id);
 
 
     @PostMapping("/enseignant/create")
@@ -40,6 +42,8 @@ public interface UtilisateurControllerInt {
     ResponseEntity<Etudiant> findEtudiantById(@PathVariable Integer id);
     @GetMapping("/etudiant/count")
     ResponseEntity<Long> countAllEtudiant();
+    @GetMapping("/etudiant/delete/{id}")
+    ResponseEntity<ServerReponse> deleteEtudiant(@PathVariable Integer id);
     @GetMapping("/etudiant/countbydept/{id}")
     ResponseEntity<Integer> countAllEtudiantByDepartement(@PathVariable Integer id);
     @GetMapping("/etudiant/countbyfil/{id}")

@@ -1,6 +1,6 @@
-const api = "https://deptmanager-backend.onrender.com/deptmanager/api"; 
+//const api = "https://deptmanager-backend.onrender.com/deptmanager/api"; 
 
-//const api = "http://localhost:8080/deptmanager/api";
+const api = "http://localhost:8080/deptmanager/api";
 
 const authapi = `${api}/auth`; 
 const actualiteapi = `${api}/actualite`; 
@@ -132,7 +132,15 @@ export const DeptManager ={
             update : `${scolariteapi}/semestre/update`,
             delete : `${scolariteapi}/semestre/delete`,
 
-        } 
+        }, 
+        AnneeAcademique :{
+            all : `${scolariteapi}/anneeacademique/all`,
+            active : `${scolariteapi}/anneeacademique/active/`,
+            create : `${scolariteapi}/anneeacademique/create`,
+            update : `${scolariteapi}/anneeacademique/update`,
+            delete : `${scolariteapi}/anneeacademique/delete/`,
+
+        }
         
     }, 
     Horaire:{

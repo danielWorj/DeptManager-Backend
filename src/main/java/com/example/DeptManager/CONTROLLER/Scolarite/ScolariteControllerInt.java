@@ -1,5 +1,6 @@
 package com.example.DeptManager.CONTROLLER.Scolarite;
 
+import com.example.DeptManager.ENTITY.Scolarite.AnneeAcademique;
 import com.example.DeptManager.ENTITY.Scolarite.Documentation.Document;
 import com.example.DeptManager.ENTITY.Scolarite.Matiere;
 import com.example.DeptManager.ENTITY.Scolarite.Repartition;
@@ -91,5 +92,17 @@ public interface ScolariteControllerInt {
     @GetMapping("/semestre/delete/{id}")
     ResponseEntity<ServerReponse> deleteSemestre(@PathVariable Integer id);
 
+    //ANNEE ACADEMIQUE
+
+    @GetMapping("/anneeacademique/all")
+    ResponseEntity<List<AnneeAcademique>> findAllAnneeAcademique();
+    @GetMapping("/anneeacademique/active/{id}")
+    ResponseEntity<ServerReponse> activerAnneeAcademique(@PathVariable Integer id);
+    @PostMapping("/anneeacademique/create")
+    ResponseEntity<ServerReponse> createAnneeAcademique(@RequestParam("annee") String annee);
+    @PostMapping("/anneeacademique/update")
+    ResponseEntity<ServerReponse> updateAnneeAcademique(@RequestParam("annee") String annee);
+    @GetMapping("/anneeacademique/delete/{id}")
+    ResponseEntity<ServerReponse> deleteAnneeAcademique(@PathVariable Integer id);
 
 }
